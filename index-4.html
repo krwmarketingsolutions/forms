@@ -141,6 +141,9 @@
   function buildForm(cfg){
     document.getElementById('form-title').textContent = cfg.name;
     document.getElementById('form-subtitle').textContent = cfg.vertical + ' — Lead Submission';
+    if(cfg.description) {
+      document.getElementById('form-subtitle').textContent = cfg.description;
+    }
     document.getElementById('modal-title').textContent  = cfg.name + ' — Posting Instructions';
     document.getElementById('instructions-btn').style.display = '';
     document.getElementById('loading-state').style.display = 'none';
