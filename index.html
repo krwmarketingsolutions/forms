@@ -3,549 +3,560 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Loading…</title>
+<title>UNIVERSAL FORM → Upload to GitHub repo "forms" → enables krwmarketingsolutions.github.io/forms</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --brand:      #1a3a5c;
-    --brand-dark: #122840;
-    --accent:     #2d6a4f;
-    --accent-dk:  #1b4332;
-    --red:        #dc2626;
-    --red-bg:     #fef2f2;
-    --green-bg:   #d1fae5;
-    --green-text: #065f46;
-    --green-bdr:  #6ee7b7;
-    --err-bg:     #fee2e2;
-    --err-text:   #991b1b;
-    --err-bdr:    #fca5a5;
-    --border:     #e2e8f0;
-    --muted:      #64748b;
-    --bg:         #f1f5f9;
-    --surface:    #ffffff;
-    --radius:     8px;
-    --radius-sm:  5px;
-  }
-
-  body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 2rem 1rem 3rem;
-    color: #1e293b;
-  }
-
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 24px rgba(0,0,0,.10);
-    width: 100%;
-    max-width: 560px;
-    overflow: hidden;
-  }
-
-  .card-hdr {
-    background: var(--brand);
-    color: white;
-    padding: 1.4rem 1.75rem;
-  }
-  .card-hdr h1 {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -.01em;
-    margin-bottom: 3px;
-  }
-  .card-hdr p {
-    font-size: 12px;
-    opacity: .65;
-  }
-
-  .card-body { padding: 1.75rem; }
-
-  .spinner-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
-    gap: 14px;
-    color: var(--muted);
-    font-size: 13px;
-  }
-  .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--border);
-    border-top-color: var(--brand);
-    border-radius: 50%;
-    animation: spin .75s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .state-msg {
-    padding: 2rem 1.75rem;
-    text-align: center;
-  }
-  .state-msg .icon { font-size: 40px; margin-bottom: 12px; }
-  .state-msg h2 { font-size: 17px; margin-bottom: 6px; }
-  .state-msg p  { font-size: 13px; color: var(--muted); line-height: 1.6; }
-  .state-msg.success h2 { color: var(--green-text); }
-  .state-msg.error   h2 { color: var(--err-text); }
-
-  .section-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--muted);
-    margin: 22px 0 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .section-label:first-child { margin-top: 0; }
-  .optional-badge {
-    font-size: 9px;
-    background: #f1f5f9;
-    color: #94a3b8;
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-weight: normal;
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: #475569;
-    margin-bottom: 5px;
-  }
-  .req { color: var(--red); font-size: 14px; line-height: 1; font-weight: 700; }
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-family: inherit;
-    outline: none;
-    transition: border .15s, box-shadow .15s;
-    background: #f8fafc;
-    color: #1e293b;
-  }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    border-color: var(--accent);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(45,106,79,.09);
-  }
-  .form-group input.invalid,
-  .form-group select.invalid {
-    border-color: var(--red) !important;
-    background: var(--red-bg) !important;
-  }
-  .field-error {
-    font-size: 11px;
-    color: var(--red);
-    margin-top: 3px;
-    display: none;
-  }
-  .field-error.show { display: block; }
-  .field-note {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-
-  .form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .form-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
-
-  .submit-btn {
-    width: 100%;
-    padding: 13px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background .15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .submit-btn:hover:not(:disabled) { background: var(--accent-dk); }
-  .submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-
-  .btn-spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,.4);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin .65s linear infinite;
-    display: none;
-  }
-  .submit-btn.loading .btn-spinner { display: block; }
-
-  .result {
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    display: none;
-    line-height: 1.5;
-  }
-  .result.success {
-    background: var(--green-bg);
-    color: var(--green-text);
-    border: 1px solid var(--green-bdr);
-  }
-  .result.error {
-    background: var(--err-bg);
-    color: var(--err-text);
-    border: 1px solid var(--err-bdr);
-  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f4f4;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem}
+  .card{background:white;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,.1);width:100%;max-width:540px;overflow:hidden}
+  .card-hdr{background:#1a1a2e;color:white;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .card-hdr-left h1{font-size:16px;font-weight:600;margin-bottom:2px}
+  .card-hdr-left p{font-size:12px;opacity:.6}
+  .instructions-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:white;border-radius:5px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s;display:none}
+  .instructions-btn:hover{background:rgba(255,255,255,.22)}
+  .card-body{padding:1.5rem}
+  .loading{text-align:center;padding:2.5rem;color:#999;font-size:14px}
+  .error-state{text-align:center;padding:2.5rem;color:#991b1b;font-size:14px}
+  .form-group{margin-bottom:14px}
+  .form-group label{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#555;margin-bottom:5px}
+  .req{color:#e53e3e;font-size:14px;line-height:1;font-weight:700}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:5px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;background:#fafafa;color:#1a1a2e}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#2d6a4f;background:white;box-shadow:0 0 0 3px rgba(45,106,79,.08)}
+  .form-group input.invalid,.form-group select.invalid{border-color:#e53e3e!important;background:#fff5f5!important}
+  .field-error{font-size:11px;color:#e53e3e;margin-top:3px;display:none}
+  .field-error.show{display:block}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+  .section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;margin:20px 0 10px;padding-bottom:5px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:6px}
+  .optional-badge{font-size:9px;background:#f0f0f0;color:#aaa;padding:1px 6px;border-radius:10px;font-weight:normal;text-transform:none;letter-spacing:0}
+  .note{font-size:11px;color:#aaa;margin-top:4px}
+  .submit-btn{width:100%;padding:13px;background:#2d6a4f;color:white;border:none;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s}
+  .submit-btn:hover:not(:disabled){background:#1b4332}
+  .submit-btn:disabled{background:#aaa;cursor:not-allowed}
+  .result{margin-top:12px;padding:12px 14px;border-radius:5px;font-size:13px;display:none}
+  .result.success{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+  .result.error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:1rem}
+  .modal-overlay.open{display:flex}
+  .modal{background:white;border-radius:8px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
+  .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:#1a1a2e;color:white;border-radius:8px 8px 0 0;position:sticky;top:0}
+  .modal-hdr h2{font-size:14px;font-weight:600}
+  .modal-x{background:none;border:none;color:white;font-size:22px;cursor:pointer;line-height:1;padding:2px 6px;opacity:.7}
+  .modal-x:hover{opacity:1}
+  .modal-body{padding:1.25rem}
+  .instructions-box{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:1rem;font-family:'Courier New',monospace;font-size:11px;line-height:1.8;white-space:pre;overflow-x:auto;margin-bottom:12px;max-height:60vh;overflow-y:auto}
+  .copy-btn{width:100%;padding:11px;background:#2d6a4f;color:white;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+  .copy-btn:hover{background:#1b4332}
+  .copy-btn.copied{background:#065f46}
 </style>
 </head>
 <body>
 
-<div class="card" id="app">
+<div class="card">
+  <div class="card-hdr">
+    <div class="card-hdr-left">
+      <h1 id="form-title">Loading...</h1>
+      <p id="form-subtitle">Lead submission form</p>
+    </div>
+    <button class="instructions-btn" id="instructions-btn" onclick="showInstructions()">📋 Posting Instructions</button>
+  </div>
   <div class="card-body">
-    <div class="spinner-wrap">
-      <div class="spinner"></div>
-      <span>Loading form…</span>
+    <div class="loading" id="loading-state">Loading form...</div>
+    <div class="error-state" id="error-state" style="display:none"></div>
+    <form id="lead-form" style="display:none" autocomplete="off" novalidate>
+      <div id="form-fields"></div>
+      <button type="submit" class="submit-btn" id="submit-btn">Submit Lead</button>
+      <div class="result" id="result"></div>
+    </form>
+  </div>
+</div>
+
+<!-- POSTING INSTRUCTIONS MODAL -->
+<div class="modal-overlay" id="instructions-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2 id="modal-title">Posting Instructions</h2>
+      <button class="modal-x" onclick="closeInstructions()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="instructions-box" id="instructions-text"></div>
+      <button class="copy-btn" id="copy-btn" onclick="copyInstructions()">Copy to Clipboard</button>
     </div>
   </div>
 </div>
 
 <script>
-(function () {
-  'use strict';
-
+  // ── Config ────────────────────────────────────────────────────
   var API_BASE = 'https://krw-backend-production.up.railway.app';
   var API_KEY  = 'krwleads2026secure';
+  // ─────────────────────────────────────────────────────────────
 
   var params   = new URLSearchParams(window.location.search);
-  var campaign = (params.get('campaign') || '').trim().toLowerCase();
-  var pubSub   = (params.get('sub') || '').trim();
+  var campaign = (params.get('campaign') || params.get('c') || 'depo').toLowerCase();
+  var pubSub   = params.get('sub') || params.get('pub') || '';
+  var websource= window.location.href;
 
-  var app = document.getElementById('app');
+  var campaignConfig = null;
 
-  function renderError(title, body) {
-    app.innerHTML =
-      '<div class="card-hdr"><h1>KRW Marketing Solutions</h1></div>' +
-      '<div class="state-msg error">' +
-        '<div class="icon">⚠️</div>' +
-        '<h2>' + escHtml(title) + '</h2>' +
-        '<p>' + escHtml(body) + '</p>' +
-      '</div>';
+  // Field type hints
+  var FIELD_TYPES = {
+    // Core
+    firstName:'text', lastName:'text', email:'email', phone:'tel',
+    // Address
+    street:'text', city:'text', state:'select', zip:'text',
+    // Demographics
+    dateOfBirth:'date', gender:'select', age:'number',
+    // MVA / Mass Tort specific
+    incidentState:'select', incidentDate:'date',
+    caseDescription:'textarea', injuryType:'text',
+    atFault:'select', hasAttorney:'select', hasInsurance:'select',
+    caseType:'text',
+    // Compliance
+    trustedFormCertUrl:'text', jornayaLeadId:'text',
+    tcpaText:'textarea', tcpaLanguage:'textarea',
+    facebookLeadId:'text', publisherSub:'text',
+    ipAddress:'text', userAgent:'text', landingPageUrl:'text',
+    // General
+    notes:'textarea', comments:'textarea',
+  };
+
+  var FIELD_PLACEHOLDERS = {
+    firstName:'Jane', lastName:'Smith', email:'jane@gmail.com',
+    phone:'3105550123', street:'123 Main St', city:'Los Angeles',
+    state:'', zip:'90001', notes:'Any additional case details...',
+    trustedFormCertUrl:'https://cert.trustedform.com/...',
+    jornayaLeadId:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+    facebookLeadId:'', publisherSub:'auto-filled from URL',
+    incidentState:'', incidentDate:'',
+    caseDescription:'Please include: incident date, at fault (yes/no), type of injury, has representation (yes/no), has insurance (yes/no), and any other important details.',
+    injuryType:'e.g. Whiplash, Back injury, Head trauma',
+    atFault:'', hasAttorney:'', hasInsurance:'',
+    dateOfBirth:'', gender:'',
+    tcpaText:'', ipAddress:'', userAgent:'', landingPageUrl:'',
+  };;
+
+  var STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID',
+    'IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT',
+    'NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
+    'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
+  // ── Load campaign config ──────────────────────────────────────
+  async function loadCampaign(){
+    try{
+      var res = await fetch(API_BASE + '/campaigns/' + campaign + '/config');
+      var cfg = await res.json();
+      if(!cfg.ok) throw new Error(cfg.error || 'Campaign not found');
+      campaignConfig = cfg;
+      buildForm(cfg);
+    } catch(err){
+      document.getElementById('loading-state').style.display = 'none';
+      var errEl = document.getElementById('error-state');
+      errEl.style.display = '';
+      errEl.textContent = '✕ Could not load form: ' + err.message + '. Check the campaign parameter in the URL.';
+    }
   }
 
-  function renderSuccess(campaignName, leadId) {
-    app.innerHTML =
-      '<div class="card-hdr"><h1>' + escHtml(campaignName) + '</h1></div>' +
-      '<div class="state-msg success">' +
-        '<div class="icon">✅</div>' +
-        '<h2>Thank you! Your information has been submitted.</h2>' +
-        '<p>A representative will be in touch with you shortly.<br>' +
-        (leadId ? 'Reference ID: <strong>' + escHtml(leadId) + '</strong>' : '') + '</p>' +
-      '</div>';
+  // ── Build form dynamically ────────────────────────────────────
+  function buildForm(cfg){
+    document.getElementById('form-title').textContent = cfg.name;
+    document.getElementById('form-subtitle').textContent = cfg.description || cfg.vertical + ' — Lead Submission';
+    document.getElementById('modal-title').textContent  = cfg.name + ' — Posting Instructions';
+    document.getElementById('instructions-btn').style.display = '';
+    document.getElementById('loading-state').style.display = 'none';
+
+    var container = document.getElementById('form-fields');
+    container.innerHTML = '';
+
+    // ── REQUIRED FIELDS SECTION ───────────────────────────────
+    if(cfg.required && cfg.required.length){
+      var reqSection = document.createElement('div');
+      reqSection.className = 'section-label';
+      reqSection.textContent = 'Required Information';
+      container.appendChild(reqSection);
+
+      // Pair firstName+lastName and email+phone side by side
+      var pairs    = [['firstName','lastName'],['email','phone']];
+      var rendered = {};
+
+      pairs.forEach(function(pair){
+        var both = pair.filter(function(n){ return cfg.required.includes(n); });
+        if(!both.length) return;
+        var row = document.createElement('div');
+        row.className = 'form-row';
+        both.forEach(function(name){
+          row.appendChild(buildField(name, true, cfg));
+          rendered[name] = true;
+        });
+        container.appendChild(row);
+      });
+
+      // All remaining required fields one by one
+      cfg.required.forEach(function(name){
+        if(rendered[name]) return;
+        container.appendChild(buildField(name, true, cfg));
+        rendered[name] = true;
+      });
+    }
+
+    // ── OPTIONAL FIELDS SECTION ───────────────────────────────
+    if(cfg.optional && cfg.optional.length){
+      // Filter out publisherSub — pre-filled from URL, shown separately
+      var visibleOptional = cfg.optional.filter(function(f){
+        return f !== 'publisherSub' && f !== 'publisherSub2' &&
+               f !== 'ipAddress' && f !== 'userAgent' && f !== 'landingPageUrl' &&
+               f !== 'facebookLeadId' && f !== 'websource';
+      });
+
+      if(visibleOptional.length){
+        var optSection = document.createElement('div');
+        optSection.className = 'section-label';
+        optSection.innerHTML = 'Additional Information <span class="optional-badge">Optional</span>';
+        container.appendChild(optSection);
+
+        // Address group side by side
+        var addrFields = ['street','city','state','zip'].filter(function(f){ return visibleOptional.includes(f); });
+        if(addrFields.length){
+          if(visibleOptional.includes('street')){
+            container.appendChild(buildField('street', false, cfg));
+          }
+          var addrRow = document.createElement('div');
+          addrRow.className = 'form-row-3';
+          ['city','state','zip'].forEach(function(f){
+            if(visibleOptional.includes(f)) addrRow.appendChild(buildField(f, false, cfg));
+          });
+          if(addrRow.children.length) container.appendChild(addrRow);
+        }
+
+        // All other optional fields
+        var skipInGroup = ['street','city','state','zip'];
+        visibleOptional.forEach(function(name){
+          if(skipInGroup.includes(name)) return;
+          container.appendChild(buildField(name, false, cfg));
+        });
+      }
+    }
+
+    // ── Pre-fill publisherSub from URL ────────────────────────
+    if(pubSub){
+      var subEl = document.getElementById('field-publisherSub');
+      if(subEl) subEl.value = pubSub;
+    }
+
+    document.getElementById('lead-form').style.display = '';
+    setupFormHandlers();
   }
 
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\"/g, '&quot;');
+  function buildField(name, required, cfg){
+    var FIELD_LABELS = {
+      firstName:'First Name', lastName:'Last Name', email:'Email Address', phone:'Cell Phone',
+      street:'Street Address', city:'City', state:'State', zip:'Zip Code',
+      dateOfBirth:'Date of Birth', gender:'Gender', age:'Age',
+      incidentState:'State Where Incident Occurred', incidentDate:'Incident Date',
+      caseDescription:'Case Description', injuryType:'Type of Injury',
+      atFault:'Were You At Fault?', hasAttorney:'Do You Have an Attorney?',
+      hasInsurance:'Do You Have Insurance?', caseType:'Case Type',
+      trustedFormCertUrl:'TrustedForm Certificate URL', jornayaLeadId:'Jornaya Lead ID',
+      tcpaText:'TCPA Consent', facebookLeadId:'Facebook Lead ID',
+      publisherSub:'Publisher Sub ID', notes:'Additional Notes',
+      ipAddress:'IP Address', userAgent:'User Agent', landingPageUrl:'Landing Page URL',
+    };
+    var label = (cfg.fieldLabels && cfg.fieldLabels[name]) || FIELD_LABELS[name] || name;
+    var type    = FIELD_TYPES[name] || 'text';
+    var ph      = FIELD_PLACEHOLDERS[name] || '';
+    var wrapper = document.createElement('div');
+    wrapper.className = 'form-group';
+
+    var lbl = document.createElement('label');
+    lbl.textContent = label;
+    if(required){
+      var req = document.createElement('span');
+      req.className = 'req';
+      req.textContent = '*';
+      lbl.appendChild(req);
+    }
+    wrapper.appendChild(lbl);
+
+    var input;
+    if(type === 'select'){
+      input = document.createElement('select');
+      var def = document.createElement('option');
+      def.value = ''; def.textContent = '— Select —';
+      input.appendChild(def);
+
+      // Different options per field
+      if(name === 'gender'){
+        ['Male','Female','Other'].forEach(function(v){
+          var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o);
+        });
+      } else if(name === 'atFault' || name === 'hasAttorney' || name === 'hasInsurance'){
+        ['Yes','No'].forEach(function(v){
+          var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o);
+        });
+      } else if(name === 'incidentState'){
+        // Full state names for incidentState
+        ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
+         'Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
+         'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan',
+         'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada',
+         'New Hampshire','New Jersey','New Mexico','New York','North Carolina',
+         'North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island',
+         'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont',
+         'Virginia','Washington','West Virginia','Wisconsin','Wyoming'
+        ].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o); });
+      } else {
+        // Default: 2-letter state codes
+        STATES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
+      }
+    } else if(type === 'textarea'){
+      input = document.createElement('textarea');
+      input.rows = name === 'caseDescription' || name === 'tcpaText' ? 4 : 2;
+      input.placeholder = ph;
+    } else {
+      input = document.createElement('input');
+      input.type = type;
+      input.placeholder = ph;
+      if(name === 'phone') input.maxLength = 10;
+      if(name === 'zip')   input.maxLength = 5;
+    }
+    input.name = name;
+    input.id   = 'field-' + name;
+    if(required) input.dataset.required = 'true';
+    wrapper.appendChild(input);
+
+    if(name === 'phone'){
+      var note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = '10 digits, no dashes';
+      wrapper.appendChild(note);
+    }
+
+    var errDiv = document.createElement('div');
+    errDiv.className = 'field-error';
+    errDiv.id = 'err-' + name;
+    errDiv.textContent = label + ' is required';
+    wrapper.appendChild(errDiv);
+
+    return wrapper;
   }
 
-  var US_STATES = [
-    'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA',
-    'HI','ID','IL','IN','IA','KS','KY','LA','ME','MD',
-    'MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
-    'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
-    'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
-  ];
+  // ── Form handlers ─────────────────────────────────────────────
+  function setupFormHandlers(){
+    var form = document.getElementById('lead-form');
 
-  function stateOptions() {
-    return '<option value="">— Select —</option>' +
-      US_STATES.map(function(s){ return '<option>' + s + '</option>'; }).join('');
+    // Phone digits only
+    var phoneEl = document.getElementById('field-phone');
+    if(phoneEl){
+      phoneEl.addEventListener('input', function(){
+        this.value = this.value.replace(/\D/g,'').slice(0,10);
+        clearErr('phone');
+      });
+    }
+
+    // Clear errors on input
+    form.querySelectorAll('input, select, textarea').forEach(function(el){
+      el.addEventListener('input',  function(){ clearErr(this.name); });
+      el.addEventListener('change', function(){ clearErr(this.name); });
+    });
+
+    form.addEventListener('submit', handleSubmit);
   }
 
-  function buildForm(campaignName) {
-    document.title = campaignName;
-
-    app.innerHTML =
-      '<div class="card-hdr">' +
-        '<h1>' + escHtml(campaignName) + '</h1>' +
-        '<p>Please fill out all required fields below</p>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<form id="lead-form" autocomplete="off" novalidate>' +
-
-          '<div class="section-label">Contact Information</div>' +
-
-          '<div class="form-row">' +
-            '<div class="form-group">' +
-              '<label>First Name <span class="req">*</span></label>' +
-              '<input type="text" name="firstName" placeholder="Jane" autocomplete="given-name"/>' +
-              '<div class="field-error" id="err-firstName">First name is required</div>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Last Name <span class="req">*</span></label>' +
-              '<input type="text" name="lastName" placeholder="Smith" autocomplete="family-name"/>' +
-              '<div class="field-error" id="err-lastName">Last name is required</div>' +
-            '</div>' +
-          '</div>' +
-
-          '<div class="form-row">' +
-            '<div class="form-group">' +
-              '<label>Email <span class="req">*</span></label>' +
-              '<input type="email" name="email" placeholder="jane@gmail.com" autocomplete="email"/>' +
-              '<div class="field-error" id="err-email">A valid email is required</div>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Cell Phone <span class="req">*</span></label>' +
-              '<input type="tel" name="phone" placeholder="3105550123" maxlength="10" autocomplete="tel"/>' +
-              '<div class="field-note">10 digits, no dashes or spaces</div>' +
-              '<div class="field-error" id="err-phone">A 10-digit phone number is required</div>' +
-            '</div>' +
-          '</div>' +
-
-          '<div class="section-label">Address <span class="optional-badge">Optional</span></div>' +
-
-          '<div class="form-group">' +
-            '<label>Street Address</label>' +
-            '<input type="text" name="street" placeholder="123 Main St" autocomplete="street-address"/>' +
-          '</div>' +
-          '<div class="form-row-3">' +
-            '<div class="form-group">' +
-              '<label>City</label>' +
-              '<input type="text" name="city" placeholder="Los Angeles" autocomplete="address-level2"/>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>State</label>' +
-              '<select name="state" autocomplete="address-level1">' + stateOptions() + '</select>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Zip</label>' +
-              '<input type="text" name="zip" placeholder="90001" maxlength="5" autocomplete="postal-code"/>' +
-            '</div>' +
-          '</div>' +
-
-          '<div class="section-label">Additional Information <span class="optional-badge">Optional</span></div>' +
-
-          '<div class="form-group">' +
-            '<label>Notes</label>' +
-            '<textarea name="notes" rows="2" placeholder="Any additional information…"></textarea>' +
-          '</div>' +
-
-          '<div class="section-label">Compliance <span class="optional-badge">Optional</span></div>' +
-
-          '<div class="form-group">' +
-            '<label>TrustedForm Certificate URL</label>' +
-            '<input type="text" name="trustedFormCertUrl" placeholder="https://cert.trustedform.com/…"/>' +
-          '</div>' +
-          '<div class="form-row">' +
-            '<div class="form-group">' +
-              '<label>Jornaya Lead ID</label>' +
-              '<input type="text" name="jornayaLeadId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Facebook Lead ID</label>' +
-              '<input type="text" name="facebookLeadId" placeholder="123456789"/>' +
-            '</div>' +
-          '</div>' +
-
-          '<input type="hidden" name="publisherSub" id="field-publisherSub" value="' + escHtml(pubSub) + '"/>' +
-
-          '<button type="submit" class="submit-btn" id="submit-btn">' +
-            '<div class="btn-spinner"></div>' +
-            '<span id="btn-label">Submit</span>' +
-          '</button>' +
-          '<div class="result" id="result"></div>' +
-
-        '</form>' +
-      '</div>';
-
-    attachFormHandlers(campaignName);
+  function clearErr(name){
+    var el  = document.getElementById('field-'+name);
+    var err = document.getElementById('err-'+name);
+    if(el)  el.classList.remove('invalid');
+    if(err) err.classList.remove('show');
   }
 
-  function attachFormHandlers(campaignName) {
-    var form   = document.getElementById('lead-form');
+  function showErr(name, msg){
+    var el  = document.getElementById('field-'+name);
+    var err = document.getElementById('err-'+name);
+    if(el)  el.classList.add('invalid');
+    if(err){ if(msg) err.textContent=msg; err.classList.add('show'); }
+  }
+
+  function validate(){
+    var ok = true;
+    document.querySelectorAll('.invalid').forEach(function(e){ e.classList.remove('invalid'); });
+    document.querySelectorAll('.field-error.show').forEach(function(e){ e.classList.remove('show'); });
+
+    if(!campaignConfig) return false;
+
+    campaignConfig.required.forEach(function(name){
+      var el  = document.getElementById('field-'+name);
+      var val = el ? el.value.trim() : '';
+      if(!val){ showErr(name); ok=false; }
+    });
+
+    var emailEl = document.getElementById('field-email');
+    if(emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){
+      showErr('email','Enter a valid email address'); ok=false;
+    }
+
+    var phoneEl = document.getElementById('field-phone');
+    if(phoneEl && phoneEl.value.replace(/\D/g,'').length < 10){
+      showErr('phone','Phone must be 10 digits'); ok=false;
+    }
+
+    return ok;
+  }
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    if(!validate()){
+      var first = document.querySelector('.invalid');
+      if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
     var btn    = document.getElementById('submit-btn');
     var result = document.getElementById('result');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    result.style.display = 'none';
 
-    form.phone.addEventListener('input', function () {
-      this.value = this.value.replace(/\D/g, '').slice(0, 10);
-      clearErr('phone');
-    });
-
-    form.zip.addEventListener('input', function () {
-      this.value = this.value.replace(/\D/g, '').slice(0, 5);
-    });
-
-    ['firstName', 'lastName', 'email'].forEach(function (n) {
-      var el = form.elements[n];
-      if (el) el.addEventListener('input', function () { clearErr(n); });
-    });
-
-    function clearErr(name) {
-      var el  = form.elements[name];
-      var err = document.getElementById('err-' + name);
-      if (el)  el.classList.remove('invalid');
-      if (err) err.classList.remove('show');
-    }
-
-    function showErr(name, msg) {
-      var el  = form.elements[name];
-      var err = document.getElementById('err-' + name);
-      if (el)  el.classList.add('invalid');
-      if (err) { if (msg) err.textContent = msg; err.classList.add('show'); }
-    }
-
-    function validate() {
-      var ok = true;
-      form.querySelectorAll('.invalid').forEach(function (e) { e.classList.remove('invalid'); });
-      form.querySelectorAll('.field-error.show').forEach(function (e) { e.classList.remove('show'); });
-
-      if (!form.firstName.value.trim()) { showErr('firstName'); ok = false; }
-      if (!form.lastName.value.trim())  { showErr('lastName');  ok = false; }
-
-      var email = form.email.value.trim();
-      if (!email) {
-        showErr('email', 'Email is required');
-        ok = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showErr('email', 'Enter a valid email address');
-        ok = false;
+    // Build payload from all fields
+    var data = { websource: websource };
+    var allFields = campaignConfig.required.concat(campaignConfig.optional);
+    allFields.forEach(function(name){
+      var el = document.getElementById('field-'+name);
+      if(el){
+        var val = el.value.trim();
+        if(val) data[name] = val;
       }
+    });
+    // Override publisherSub with URL param if present
+    if(pubSub) data.publisherSub = pubSub;
+    // Phone: digits only
+    if(data.phone) data.phone = data.phone.replace(/\D/g,'');
 
-      var phone = form.phone.value.replace(/\D/g, '');
-      if (phone.length < 10) { showErr('phone', 'Phone must be exactly 10 digits'); ok = false; }
-
-      return ok;
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      if (!validate()) {
-        var first = form.querySelector('.invalid');
-        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
-      btn.disabled = true;
-      btn.classList.add('loading');
-      document.getElementById('btn-label').textContent = 'Submitting…';
-      result.style.display = 'none';
-
-      var data = {
-        firstName:          form.firstName.value.trim(),
-        lastName:           form.lastName.value.trim(),
-        email:              form.email.value.trim().toLowerCase(),
-        phone:              form.phone.value.replace(/\D/g, ''),
-        street:             form.street.value.trim()             || undefined,
-        city:               form.city.value.trim()               || undefined,
-        state:              form.state.value                      || undefined,
-        zip:                form.zip.value.trim()                 || undefined,
-        notes:              form.notes.value.trim()               || undefined,
-        trustedFormCertUrl: form.trustedFormCertUrl.value.trim()  || undefined,
-        jornayaLeadId:      form.jornayaLeadId.value.trim()       || undefined,
-        facebookLeadId:     form.facebookLeadId.value.trim()      || undefined,
-        publisherSub:       pubSub || form.publisherSub.value.trim() || undefined,
-        websource:          window.location.href,
-      };
-
-      fetch(API_BASE + '/lead/' + encodeURIComponent(campaign), {
+    try{
+      var res  = await fetch(API_BASE + '/lead/' + campaign, {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY },
+        headers: {'Content-Type':'application/json','x-api-key':API_KEY},
         body:    JSON.stringify(data),
-      })
-      .then(function (res) { return res.json().then(function (j) { return { ok: res.ok, body: j }; }); })
-      .then(function (r) {
-        if (r.body.status === 'received') {
-          renderSuccess(campaignName, r.body.leadId);
-        } else {
-          result.className   = 'result error';
-          result.textContent = '✕ ' + (r.body.reason || r.body.error || 'Submission failed. Please check all fields and try again.');
-          result.style.display = 'block';
-          btn.disabled = false;
-          btn.classList.remove('loading');
-          document.getElementById('btn-label').textContent = 'Submit';
-        }
-      })
-      .catch(function (err) {
-        result.className   = 'result error';
-        result.textContent = '✕ Connection error: ' + err.message;
-        result.style.display = 'block';
-        btn.disabled = false;
-        btn.classList.remove('loading');
-        document.getElementById('btn-label').textContent = 'Submit';
       });
-    });
-  }
-
-  if (!campaign) {
-    renderError(
-      'No campaign specified',
-      'Please add a campaign parameter to the URL, e.g. ?campaign=depo'
-    );
-    return;
-  }
-
-  fetch(API_BASE + '/campaigns/' + encodeURIComponent(campaign) + '/config')
-    .then(function (res) {
-      if (res.status === 404) {
-        throw { notFound: true };
-      }
-      if (!res.ok) {
-        throw new Error('Server error (' + res.status + ')');
-      }
-      return res.json();
-    })
-    .then(function (data) {
-      buildForm(data.name || campaign);
-    })
-    .catch(function (err) {
-      if (err && err.notFound) {
-        renderError(
-          'Campaign not found',
-          'The campaign "' + campaign + '" does not exist or is no longer active. ' +
-          'Please check the URL and try again.'
-        );
+      var resp = await res.json();
+      if(resp.status === 'received'){
+        result.className   = 'result success';
+        result.textContent = '✓ Lead accepted. Reference ID: ' + resp.leadId;
+        document.getElementById('lead-form').reset();
+        if(pubSub && document.getElementById('field-publisherSub'))
+          document.getElementById('field-publisherSub').value = pubSub;
       } else {
-        renderError(
-          'Unable to load form',
-          'There was a problem connecting to the server. Please try again in a moment.'
-        );
+        result.className   = 'result error';
+        result.textContent = '✕ ' + (resp.reason || 'Submission failed. Check all required fields.');
       }
-    });
+    } catch(err){
+      result.className   = 'result error';
+      result.textContent = '✕ Connection error: ' + err.message;
+    }
 
-}());
+    result.style.display = 'block';
+    btn.disabled    = false;
+    btn.textContent = 'Submit Lead';
+  }
+
+  // ── Posting Instructions ──────────────────────────────────────
+  function showInstructions(){
+    if(!campaignConfig) return;
+    var sub     = pubSub || 'YOUR_SUB_ID';
+    var formUrl = window.location.origin + window.location.pathname + '?campaign=' + campaign + '&sub=' + sub;
+    var apiUrl  = API_BASE + '/lead/' + campaign;
+    var line    = '─'.repeat(52);
+    var dline   = '='.repeat(52);
+
+    var reqLines = campaignConfig.required.map(function(f){
+      var label = (campaignConfig.fieldLabels && campaignConfig.fieldLabels[f]) || f;
+      return '  ' + f.padEnd(18) + '* string    ' + label;
+    }).join('\n');
+
+    var optLines = campaignConfig.optional.filter(function(f){
+      return !['publisherSub'].includes(f);
+    }).map(function(f){
+      var label = (campaignConfig.fieldLabels && campaignConfig.fieldLabels[f]) || f;
+      return '  ' + f.padEnd(20) + 'string    ' + label;
+    }).join('\n');
+
+    var examplePayload = '{\n' +
+      campaignConfig.required.map(function(f){
+        var ex = {firstName:'Jane',lastName:'Smith',email:'jane@gmail.com',phone:'3105550123'};
+        return '  "'+f+'": "'+(ex[f]||'example')+'"';
+      }).join(',\n') +
+      ',\n  "publisherSub": "'+sub+'"\n}';
+
+    var txt =
+dline+'\n'+
+campaignConfig.name.toUpperCase()+' — PUBLISHER POSTING INSTRUCTIONS\n'+
+dline+'\n\n'+
+'CAMPAIGN:      '+campaignConfig.name+'\n'+
+'VERTICAL:      '+campaignConfig.vertical+'\n'+
+'PUBLISHER ID:  '+sub+'\n'+
+'FORM URL:      '+formUrl+'\n\n'+
+line+'\n'+
+'API ENDPOINT\n'+
+line+'\n\n'+
+'Method:   POST\n'+
+'URL:      '+apiUrl+'\n\n'+
+'Headers:\n'+
+'  Content-Type:  application/json\n'+
+'  x-api-key:     '+API_KEY+'\n\n'+
+line+'\n'+
+'REQUIRED FIELDS  (* must be included or submission will fail)\n'+
+line+'\n\n'+
+reqLines+'\n\n'+
+line+'\n'+
+'OPTIONAL FIELDS\n'+
+line+'\n\n'+
+optLines+'\n\n'+
+line+'\n'+
+'EXAMPLE PAYLOAD\n'+
+line+'\n\n'+
+examplePayload+'\n\n'+
+line+'\n'+
+'RESPONSES\n'+
+line+'\n\n'+
+'Accepted:  {"status":"received","leadId":"KRW-'+campaign.toUpperCase()+'-123"}\n'+
+'Rejected:  {"status":"rejected","reason":"Missing required fields: phone"}\n\n'+
+line+'\n'+
+'NOTES\n'+
+line+'\n\n'+
+'* Phone must be 10 digits — strip all formatting before sending\n'+
+'* publisherSub auto-appended when using the form URL above\n'+
+'* Save the leadId from each response for your own tracking\n'+
+'* You are responsible for TrustedForm / Jornaya data\n'+
+dline;
+
+    document.getElementById('instructions-text').textContent = txt;
+    document.getElementById('copy-btn').textContent = 'Copy to Clipboard';
+    document.getElementById('copy-btn').classList.remove('copied');
+    document.getElementById('instructions-modal').classList.add('open');
+  }
+
+  function closeInstructions(){
+    document.getElementById('instructions-modal').classList.remove('open');
+  }
+
+  function copyInstructions(){
+    var text = document.getElementById('instructions-text').textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      var b = document.getElementById('copy-btn');
+      b.textContent='✓ Copied!'; b.classList.add('copied');
+      setTimeout(function(){ b.textContent='Copy to Clipboard'; b.classList.remove('copied'); },2500);
+    }).catch(function(){
+      var ta=document.createElement('textarea');
+      ta.value=text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      document.getElementById('copy-btn').textContent='✓ Copied!';
+    });
+  }
+
+  document.getElementById('instructions-modal').addEventListener('click',function(e){
+    if(e.target===this) closeInstructions();
+  });
+
+  // Load on page ready
+  loadCampaign();
 </script>
 </body>
 </html>
