@@ -122,6 +122,7 @@
     // Roundup specific
     haveAttorney:'select', usedRoundup:'select',
     whichCancer:'select', whatYear:'select', exposedLocation:'select',
+    haveAttorney:"select",usedRoundup:"select",whichCancer:"select",whatYear:"select",exposedLocation:"select",
   };
 
   var FIELD_PLACEHOLDERS = {
@@ -320,6 +321,24 @@
       input = document.createElement('textarea');
       input.rows = name === 'caseDescription' || name === 'tcpaText' ? 4 : 2;
       input.placeholder = ph;
+    } else if(name === 'haveAttorney' || name === 'usedRoundup'){
+      input = document.createElement('select');
+      input.id='field-'+name; input.name=name; if(required) input.required=true;
+      var opts0 = name==='haveAttorney' ? ['','Yes','No'] : ['','Yes','No'];
+      var ph0   = name==='haveAttorney' ? 'Do you have an attorney?' : 'Were you exposed to Roundup?';
+      opts0.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||ph0; input.appendChild(o); });
+    } else if(name === 'whichCancer'){
+      input = document.createElement('select');
+      input.id='field-'+name; input.name=name; if(required) input.required=true;
+      ['','B-Cell Lymphoma','Chronic Lymphocytic Leukemia (CLL)','Hairy Cell Leukemia','Mantle Cell Lymphoma (MCL)','Non-Hodgkin's Lymphoma (NHL)','T-Cell Lymphoma','Other cancer','No cancer'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select cancer type'; input.appendChild(o); });
+    } else if(name === 'whatYear'){
+      input = document.createElement('select');
+      input.id='field-'+name; input.name=name; if(required) input.required=true;
+      ['','2020 or After','Before 2020'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select year'; input.appendChild(o); });
+    } else if(name === 'exposedLocation'){
+      input = document.createElement('select');
+      input.id='field-'+name; input.name=name; if(required) input.required=true;
+      ['','Work','Home','Both'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select location'; input.appendChild(o); });
     } else if(type === 'select') {
       // Fallback for any select field not explicitly handled
       input = document.createElement('select');
