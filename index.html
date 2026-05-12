@@ -319,6 +319,20 @@
       input = document.createElement('textarea');
       input.rows = name === 'caseDescription' || name === 'tcpaText' ? 4 : 2;
       input.placeholder = ph;
+    } else if(type === 'select') {
+      // Fallback for any select field not explicitly handled
+      input = document.createElement('select');
+      input.id = 'field-'+name;
+      input.name = name;
+      if(required) input.required = true;
+      var defOpt = document.createElement('option');
+      defOpt.value = ''; defOpt.textContent = '— Select —';
+      input.appendChild(defOpt);
+      ['Yes','No'].forEach(function(v){
+        var o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        input.appendChild(o);
+      });
     } else {
       input = document.createElement('input');
       input.type = type;
