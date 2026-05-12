@@ -118,6 +118,9 @@
     ipAddress:'text', userAgent:'text', landingPageUrl:'text',
     // General
     notes:'textarea', comments:'textarea',
+    // Roundup specific
+    haveAttorney:'select', usedRoundup:'select',
+    whichCancer:'select', whatYear:'select', exposedLocation:'select',
   };
 
   var FIELD_PLACEHOLDERS = {
@@ -248,7 +251,12 @@
 
   function buildField(name, required, cfg){
     var FIELD_LABELS = {
-      firstName:'First Name', lastName:'Last Name', email:'Email Address', phone:'Cell Phone',
+      firstName:'First Name', lastName:'Last Name',
+      haveAttorney:'Do You Have an Attorney?',
+      usedRoundup:'Were You or a Loved One Exposed to Roundup?',
+      whichCancer:'Cancer Diagnosis',
+      whatYear:'Year Diagnosed',
+      exposedLocation:'Where Were You Exposed to Roundup?', email:'Email Address', phone:'Cell Phone',
       street:'Street Address', city:'City', state:'State', zip:'Zip Code',
       dateOfBirth:'Date of Birth', gender:'Gender', age:'Age',
       incidentState:'State Where Incident Occurred', incidentDate:'Incident Date',
