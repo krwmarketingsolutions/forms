@@ -116,9 +116,12 @@
     tcpaText:'textarea', publisherSub:'text',
     ipAddress:'text', userAgent:'text', landingPageUrl:'text',
     notes:'textarea',
-    // Roundup specific
     haveAttorney:'select', usedRoundup:'select',
     whichCancer:'select', whatYear:'select', exposedLocation:'select',
+    rideshareGender:'select', sexuallyAssaulted:'select', rideshareCompany:'select',
+    driverOrPassenger:'select', abuseType:'select', hasReceipt:'select',
+    fraudConviction:'select', reportedTo:'select', bestTimeToCall:'select',
+    incidentStateText:'text',
   };
 
   var FIELD_LABELS = {
@@ -136,6 +139,17 @@
     publisherSub:'Publisher Sub ID', ipAddress:'IP Address',
     userAgent:'User Agent', landingPageUrl:'Landing Page URL',
     notes:'Additional Notes',
+    rideshareGender:'What Is Your Gender?',
+    sexuallyAssaulted:'Were You Sexually Assaulted by a Rideshare Driver?',
+    rideshareCompany:'What Is the Name of the Rideshare Company?',
+    driverOrPassenger:'Were You the Driver or Passenger?',
+    abuseType:'What Type of Abuse Did You Experience?',
+    incidentDate:'What Date Did the Incident Occur? (DD/MM/YYYY)',
+    incidentStateText:'What State Did the Incident Occur In?',
+    hasReceipt:'Do You Have a Rideshare Receipt for This Incident?',
+    fraudConviction:'Have You Ever Been Convicted for Any Type of Fraud?',
+    reportedTo:'Have You Reported the Incident to Any of the Following?',
+    bestTimeToCall:'When Is the Best Time to Reach You?',
     // Roundup
     haveAttorney:'Do You Have an Attorney?',
     usedRoundup:'Were You or a Loved One Exposed to Roundup?',
@@ -235,7 +249,34 @@
     var type = FIELD_TYPES[name] || 'text';
     var input;
 
-    if(name === 'haveAttorney' || name === 'usedRoundup'){
+    if(name === 'rideshareGender'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938095','Female'],['938096','Male (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'sexuallyAssaulted'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938038','Yes'],['938039','No (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'rideshareCompany'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938042','Lyft'],['938043','Uber'],['938044','Other (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'driverOrPassenger'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938060','Passenger'],['938059','Driver (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'abuseType'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938070','Masturbation'],['938069','Indecent Exposure'],['938068','Non-Consensual Touching or Kissing'],['938067','Forced Oral Copulation'],['938066','Forced Manual Stimulation'],['938065','Rape/Sodomy'],['938044','Other (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'hasReceipt'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['582455','Yes'],['582456','No (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'fraudConviction'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938102','No'],['938101','Yes (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'reportedTo'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['1236409','No One'],['1236407','Police'],['1236406','Medical Professional'],['1236405','Rideshare Company'],['1236408','Therapist'],['1236404','Family/Friends']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'bestTimeToCall'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['295473','Anytime'],['295470','Morning'],['295471','Afternoon'],['295472','Evening']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'haveAttorney' || name === 'usedRoundup'){
       input = document.createElement('select');
       var ph = name==='haveAttorney' ? 'Do you have an attorney?' : 'Were you exposed to Roundup?';
       [['','-- '+ph+' --'],['Yes','Yes'],['No','No']].forEach(function(v){ var o=document.createElement('option'); o.value=v[0]; o.textContent=v[1]; input.appendChild(o); });
