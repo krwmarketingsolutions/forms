@@ -1,604 +1,379 @@
 <!DOCTYPE html>
-<!-- KRW Forms v2.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>UNIVERSAL FORM → Upload to GitHub repo "forms" → enables krwmarketingsolutions.github.io/forms</title>
+<title>KRW Marketing Solutions</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f4f4f4;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem}
-  .card{background:white;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,.1);width:100%;max-width:540px;overflow:hidden}
-  .card-hdr{background:#1a1a2e;color:white;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .card-hdr-left h1{font-size:16px;font-weight:600;margin-bottom:2px}
-  .card-hdr-left p{font-size:12px;opacity:.6}
-  .instructions-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:white;border-radius:5px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s;display:none}
-  .instructions-btn:hover{background:rgba(255,255,255,.22)}
-  .card-body{padding:1.5rem}
-  .loading{text-align:center;padding:2.5rem;color:#999;font-size:14px}
-  .error-state{text-align:center;padding:2.5rem;color:#991b1b;font-size:14px}
-  .form-group{margin-bottom:14px}
-  .form-group label{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#555;margin-bottom:5px}
-  .req{color:#e53e3e;font-size:14px;line-height:1;font-weight:700}
-  .form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:5px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;background:#fafafa;color:#1a1a2e}
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#2d6a4f;background:white;box-shadow:0 0 0 3px rgba(45,106,79,.08)}
-  .form-group input.invalid,.form-group select.invalid{border-color:#e53e3e!important;background:#fff5f5!important}
-  .field-error{font-size:11px;color:#e53e3e;margin-top:3px;display:none}
-  .field-error.show{display:block}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
-  .section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;margin:20px 0 10px;padding-bottom:5px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:6px}
-  .optional-badge{font-size:9px;background:#f0f0f0;color:#aaa;padding:1px 6px;border-radius:10px;font-weight:normal;text-transform:none;letter-spacing:0}
-  .note{font-size:11px;color:#aaa;margin-top:4px}
-  .submit-btn{width:100%;padding:13px;background:#2d6a4f;color:white;border:none;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s}
-  .submit-btn:hover:not(:disabled){background:#1b4332}
-  .submit-btn:disabled{background:#aaa;cursor:not-allowed}
-  .result{margin-top:12px;padding:12px 14px;border-radius:5px;font-size:13px;display:none}
-  .result.success{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
-  .result.error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-  /* Modal */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:1rem}
-  .modal-overlay.open{display:flex}
-  .modal{background:white;border-radius:8px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
-  .modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:#1a1a2e;color:white;border-radius:8px 8px 0 0;position:sticky;top:0}
-  .modal-hdr h2{font-size:14px;font-weight:600}
-  .modal-x{background:none;border:none;color:white;font-size:22px;cursor:pointer;line-height:1;padding:2px 6px;opacity:.7}
-  .modal-x:hover{opacity:1}
-  .modal-body{padding:1.25rem}
-  .instructions-box{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:1rem;font-family:'Courier New',monospace;font-size:11px;line-height:1.8;white-space:pre;overflow-x:auto;margin-bottom:12px;max-height:60vh;overflow-y:auto}
-  .copy-btn{width:100%;padding:11px;background:#2d6a4f;color:white;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
-  .copy-btn:hover{background:#1b4332}
-  .copy-btn.copied{background:#065f46}
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f4f4f4; min-height:100vh; }
+  .page-wrap{ max-width:680px; margin:0 auto; padding:16px; }
+
+  /* Header */
+  .form-header{ background:#1a2744; color:#fff; border-radius:10px 10px 0 0; padding:24px 28px; }
+  .form-header h1{ font-size:20px; font-weight:700; margin-bottom:4px; }
+  .form-header p{ font-size:13px; opacity:.75; }
+
+  /* Card */
+  .form-card{ background:#fff; border-radius:0 0 10px 10px; padding:28px; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+
+  /* Section labels */
+  .section-label{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#888; margin:20px 0 10px; padding-bottom:6px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; }
+  .optional-badge{ background:#f0f0f0; color:#999; font-size:9px; padding:2px 6px; border-radius:10px; font-weight:600; }
+
+  /* Form groups */
+  .form-group{ margin-bottom:14px; }
+  .form-group label{ display:block; font-size:11px; font-weight:600; color:#444; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
+  .req-star{ color:#e53e3e; margin-left:3px; }
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; padding:11px 13px; border:1.5px solid #ddd; border-radius:7px;
+    font-size:14px; color:#222; background:#fff; transition:border .15s;
+    appearance:none; -webkit-appearance:none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none; border-color:#2563eb;
+  }
+  .form-group .hint{ font-size:11px; color:#999; margin-top:4px; }
+  .form-group textarea{ resize:vertical; min-height:80px; }
+
+  /* Row layouts */
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-row-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  @media(max-width:500px){ .form-row,.form-row-3{ grid-template-columns:1fr; } }
+
+  /* Submit button */
+  .submit-btn{ width:100%; padding:14px; background:#16a34a; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; margin-top:20px; transition:background .15s; }
+  .submit-btn:hover:not(:disabled){ background:#15803d; }
+  .submit-btn:disabled{ background:#aaa; cursor:not-allowed; }
+
+  /* States */
+  .result{ margin-top:16px; padding:14px 16px; border-radius:8px; font-size:13px; display:none; }
+  .result.success{ background:#dcfce7; color:#166534; border:1px solid #86efac; }
+  .result.error{ background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+
+  /* Loading / error states */
+  .state-box{ text-align:center; padding:48px 24px; }
+  .state-box h2{ font-size:18px; font-weight:600; margin-bottom:8px; }
+  .state-box p{ font-size:13px; color:#666; }
+  .spinner{ width:36px; height:36px; border:3px solid #e5e7eb; border-top-color:#2563eb; border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 16px; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .error-icon{ font-size:36px; margin-bottom:12px; }
 </style>
 </head>
 <body>
-
-<div class="card">
-  <div class="card-hdr">
-    <div class="card-hdr-left">
-      <h1 id="form-title">Loading...</h1>
-      <p id="form-subtitle">Lead submission form</p>
-    </div>
-    <button class="instructions-btn" id="instructions-btn" onclick="showInstructions()">📋 Posting Instructions</button>
+<div class="page-wrap">
+  <div class="form-header">
+    <h1 id="form-title">KRW Marketing Solutions</h1>
+    <p id="form-subtitle">Lead Submission Form</p>
   </div>
-  <div class="card-body">
-    <div class="loading" id="loading-state">Loading form...</div>
-    <div class="error-state" id="error-state" style="display:none"></div>
-    <form id="lead-form" style="display:none" autocomplete="off" novalidate>
+  <div class="form-card">
+    <!-- Loading -->
+    <div id="state-loading" class="state-box">
+      <div class="spinner"></div>
+      <p>Loading form...</p>
+    </div>
+    <!-- Error -->
+    <div id="state-error" class="state-box" style="display:none">
+      <div class="error-icon">⚠️</div>
+      <h2 style="color:#991b1b">Campaign not found</h2>
+      <p id="error-msg">Check the URL and try again.</p>
+    </div>
+    <!-- Success -->
+    <div id="state-success" class="state-box" style="display:none">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <h2 style="color:#166534">Lead Submitted!</h2>
+      <p>Your lead has been received. Lead ID: <strong id="success-id"></strong></p>
+    </div>
+    <!-- Form -->
+    <div id="lead-form" style="display:none">
       <div id="form-fields"></div>
-      <button type="submit" class="submit-btn" id="submit-btn">Submit Lead</button>
-      <div class="result" id="result"></div>
-    </form>
-  </div>
-</div>
-
-<!-- POSTING INSTRUCTIONS MODAL -->
-<div class="modal-overlay" id="instructions-modal">
-  <div class="modal">
-    <div class="modal-hdr">
-      <h2 id="modal-title">Posting Instructions</h2>
-      <button class="modal-x" onclick="closeInstructions()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="instructions-box" id="instructions-text"></div>
-      <button class="copy-btn" id="copy-btn" onclick="copyInstructions()">Copy to Clipboard</button>
+      <button class="submit-btn" id="submit-btn">Submit Lead</button>
+      <div class="result" id="result-msg"></div>
     </div>
   </div>
 </div>
 
 <script>
-  // ── Config ────────────────────────────────────────────────────
   var API_BASE = 'https://krw-backend-production.up.railway.app';
   var API_KEY  = 'krwleads2026secure';
-  // ─────────────────────────────────────────────────────────────
 
   var params   = new URLSearchParams(window.location.search);
-  var campaign = (params.get('campaign') || params.get('c') || 'depo').toLowerCase();
-  var pubSub   = params.get('sub') || params.get('pub') || '';
+  var campaign = (params.get('campaign')||'').toLowerCase().trim();
+  var pubSub   = params.get('sub') || '';
   var websource= window.location.href;
 
   var campaignConfig = null;
 
-  // Field type hints
+  // ── Field definitions ─────────────────────────────────────
   var FIELD_TYPES = {
-    // Core
     firstName:'text', lastName:'text', email:'email', phone:'tel',
-    // Address
     street:'text', city:'text', state:'select', zip:'text',
-    // Demographics
     dateOfBirth:'date', gender:'select', age:'number',
-    // MVA / Mass Tort specific
     incidentState:'select', incidentDate:'date',
     caseDescription:'textarea', injuryType:'text',
     atFault:'select', hasAttorney:'select', hasInsurance:'select',
-    caseType:'text',
-    // Compliance
     trustedFormCertUrl:'text', jornayaLeadId:'text',
-    tcpaText:'textarea', tcpaLanguage:'textarea',
-    facebookLeadId:'text', publisherSub:'text',
+    tcpaText:'textarea', publisherSub:'text',
     ipAddress:'text', userAgent:'text', landingPageUrl:'text',
-    // General
-    notes:'textarea', comments:'textarea',
+    notes:'textarea',
     // Roundup specific
     haveAttorney:'select', usedRoundup:'select',
     whichCancer:'select', whatYear:'select', exposedLocation:'select',
-    haveAttorney:"select",usedRoundup:"select",whichCancer:"select",whatYear:"select",exposedLocation:"select",
   };
 
-  var FIELD_PLACEHOLDERS = {
-    firstName:'Jane', lastName:'Smith', email:'jane@gmail.com',
-    phone:'3105550123', street:'123 Main St', city:'Los Angeles',
-    state:'', zip:'90001', notes:'Any additional case details...',
-    trustedFormCertUrl:'https://cert.trustedform.com/...',
-    jornayaLeadId:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-    facebookLeadId:'', publisherSub:'auto-filled from URL',
-    incidentState:'', incidentDate:'',
-    caseDescription:'Please include: incident date, at fault (yes/no), type of injury, has representation (yes/no), has insurance (yes/no), and any other important details.',
-    injuryType:'e.g. Whiplash, Back injury, Head trauma',
-    atFault:'', hasAttorney:'', hasInsurance:'',
-    dateOfBirth:'', gender:'',
-    tcpaText:'', ipAddress:'', userAgent:'', landingPageUrl:'',
-  };;
+  var FIELD_LABELS = {
+    firstName:'First Name', lastName:'Last Name',
+    email:'Email Address', phone:'Cell Phone',
+    street:'Street Address', city:'City', state:'State', zip:'Zip Code',
+    dateOfBirth:'Date of Birth', gender:'Gender',
+    incidentState:'State Where Incident Occurred',
+    incidentDate:'Incident Date', caseDescription:'Case Description',
+    injuryType:'Type of Injury', atFault:'Were You At Fault?',
+    hasAttorney:'Do You Have an Attorney?',
+    hasInsurance:'Do You Have Insurance?',
+    trustedFormCertUrl:'TrustedForm Certificate URL',
+    jornayaLeadId:'Jornaya Lead ID', tcpaText:'TCPA Consent',
+    publisherSub:'Publisher Sub ID', ipAddress:'IP Address',
+    userAgent:'User Agent', landingPageUrl:'Landing Page URL',
+    notes:'Additional Notes',
+    // Roundup
+    haveAttorney:'Do You Have an Attorney?',
+    usedRoundup:'Were You or a Loved One Exposed to Roundup?',
+    whichCancer:'Cancer Diagnosis',
+    whatYear:'Year Diagnosed',
+    exposedLocation:'Where Were You Exposed to Roundup?',
+  };
 
-  var STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID',
-    'IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT',
-    'NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
-    'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+  var STATES_2 = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+  var STATES_FULL = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 
-  // ── Load campaign config ──────────────────────────────────────
-  async function loadCampaign(){
-    try{
-      var res = await fetch(API_BASE + '/campaigns/' + campaign + '/config');
-      var cfg = await res.json();
-      if(!cfg.ok) throw new Error(cfg.error || 'Campaign not found');
-      campaignConfig = cfg;
-      buildForm(cfg);
-    } catch(err){
-      document.getElementById('loading-state').style.display = 'none';
-      var errEl = document.getElementById('error-state');
-      errEl.style.display = '';
-      errEl.textContent = '✕ Could not load form: ' + err.message + '. Check the campaign parameter in the URL.';
-    }
-  }
-
-  // ── Build form dynamically ────────────────────────────────────
+  // ── Build form ────────────────────────────────────────────
   function buildForm(cfg){
-    document.getElementById('form-title').textContent = cfg.name;
-    document.getElementById('form-subtitle').textContent = cfg.description || cfg.vertical + ' — Lead Submission';
-    document.getElementById('modal-title').textContent  = cfg.name + ' — Posting Instructions';
-    document.getElementById('instructions-btn').style.display = '';
-    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('form-title').textContent    = cfg.name || 'KRW Marketing Solutions';
+    document.getElementById('form-subtitle').textContent = cfg.description || cfg.vertical+' — Lead Submission';
 
     var container = document.getElementById('form-fields');
     container.innerHTML = '';
 
-    // ── REQUIRED FIELDS SECTION ───────────────────────────────
-    if(cfg.required && cfg.required.length){
-      var reqSection = document.createElement('div');
-      reqSection.className = 'section-label';
-      reqSection.textContent = 'Required Information';
-      container.appendChild(reqSection);
+    var req = cfg.required || [];
+    var opt = cfg.optional || [];
+    var labels = cfg.fieldLabels || {};
 
-      // Pair firstName+lastName and email+phone side by side
-      var pairs    = [['firstName','lastName'],['email','phone']];
+    function getLabel(name){ return labels[name] || FIELD_LABELS[name] || name.replace(/([A-Z])/g,' $1').replace(/^./,function(s){return s.toUpperCase();}); }
+
+    // Required section
+    if(req.length){
+      var secReq = document.createElement('div');
+      secReq.className = 'section-label';
+      secReq.textContent = 'Required Information';
+      container.appendChild(secReq);
+
       var rendered = {};
-
-      pairs.forEach(function(pair){
-        var both = pair.filter(function(n){ return cfg.required.includes(n); });
+      // Pair firstName+lastName, email+phone side by side
+      [['firstName','lastName'],['email','phone']].forEach(function(pair){
+        var both = pair.filter(function(n){ return req.includes(n); });
         if(!both.length) return;
         var row = document.createElement('div');
         row.className = 'form-row';
-        both.forEach(function(name){
-          row.appendChild(buildField(name, true, cfg));
-          rendered[name] = true;
-        });
+        both.forEach(function(name){ row.appendChild(buildField(name, true, getLabel(name))); rendered[name]=true; });
         container.appendChild(row);
       });
-
-      // All remaining required fields one by one
-      cfg.required.forEach(function(name){
+      // Remaining required fields
+      req.forEach(function(name){
         if(rendered[name]) return;
-        container.appendChild(buildField(name, true, cfg));
-        rendered[name] = true;
+        container.appendChild(buildField(name, true, getLabel(name)));
       });
     }
 
-    // ── OPTIONAL FIELDS SECTION ───────────────────────────────
-    if(cfg.optional && cfg.optional.length){
-      // Filter out publisherSub — pre-filled from URL, shown separately
-      var visibleOptional = cfg.optional.filter(function(f){
-        return f !== 'publisherSub' && f !== 'publisherSub2' &&
-               f !== 'ipAddress' && f !== 'userAgent' && f !== 'landingPageUrl' &&
-               f !== 'facebookLeadId' && f !== 'websource';
-      });
+    // Optional section
+    var visOpt = opt.filter(function(f){
+      return !['publisherSub','publisherSub2','ipAddress','userAgent','landingPageUrl','facebookLeadId','websource'].includes(f);
+    });
+    if(visOpt.length){
+      var secOpt = document.createElement('div');
+      secOpt.className = 'section-label';
+      secOpt.innerHTML = 'Additional Information <span class="optional-badge">Optional</span>';
+      container.appendChild(secOpt);
 
-      if(visibleOptional.length){
-        var optSection = document.createElement('div');
-        optSection.className = 'section-label';
-        optSection.innerHTML = 'Additional Information <span class="optional-badge">Optional</span>';
-        container.appendChild(optSection);
-
-        // Address group side by side
-        var addrFields = ['street','city','state','zip'].filter(function(f){ return visibleOptional.includes(f); });
-        if(addrFields.length){
-          if(visibleOptional.includes('street')){
-            container.appendChild(buildField('street', false, cfg));
-          }
-          var addrRow = document.createElement('div');
-          addrRow.className = 'form-row-3';
-          ['city','state','zip'].forEach(function(f){
-            if(visibleOptional.includes(f)) addrRow.appendChild(buildField(f, false, cfg));
-          });
-          if(addrRow.children.length) container.appendChild(addrRow);
-        }
-
-        // All other optional fields
-        var skipInGroup = ['street','city','state','zip'];
-        visibleOptional.forEach(function(name){
-          if(skipInGroup.includes(name)) return;
-          container.appendChild(buildField(name, false, cfg));
-        });
+      // Address group
+      var addrFields = ['street','city','state','zip'].filter(function(f){ return visOpt.includes(f); });
+      if(addrFields.length){
+        if(visOpt.includes('street')) container.appendChild(buildField('street',false,getLabel('street')));
+        var addrRow = document.createElement('div');
+        addrRow.className = 'form-row-3';
+        ['city','state','zip'].forEach(function(f){ if(visOpt.includes(f)) addrRow.appendChild(buildField(f,false,getLabel(f))); });
+        if(addrRow.children.length) container.appendChild(addrRow);
       }
+
+      visOpt.filter(function(f){ return !['street','city','state','zip'].includes(f); }).forEach(function(name){
+        container.appendChild(buildField(name, false, getLabel(name)));
+      });
     }
 
-    // ── Pre-fill publisherSub from URL ────────────────────────
+    // Pre-fill publisherSub
     if(pubSub){
-      var subEl = document.getElementById('field-publisherSub');
-      if(subEl) subEl.value = pubSub;
+      var el = document.getElementById('field-publisherSub');
+      if(el) el.value = pubSub;
     }
 
+    document.getElementById('state-loading').style.display = 'none';
     document.getElementById('lead-form').style.display = '';
-    setupFormHandlers();
+
+    document.getElementById('submit-btn').addEventListener('click', submitLead);
   }
 
-  function buildField(name, required, cfg){
-    var FIELD_LABELS = {
-      firstName:'First Name', lastName:'Last Name',
-      haveAttorney:'Do You Have an Attorney?',
-      usedRoundup:'Were You or a Loved One Exposed to Roundup?',
-      whichCancer:'Cancer Diagnosis',
-      whatYear:'Year Diagnosed',
-      exposedLocation:'Where Were You Exposed to Roundup?', email:'Email Address', phone:'Cell Phone',
-      street:'Street Address', city:'City', state:'State', zip:'Zip Code',
-      dateOfBirth:'Date of Birth', gender:'Gender', age:'Age',
-      incidentState:'State Where Incident Occurred', incidentDate:'Incident Date',
-      caseDescription:'Case Description', injuryType:'Type of Injury',
-      atFault:'Were You At Fault?', hasAttorney:'Do You Have an Attorney?',
-      hasInsurance:'Do You Have Insurance?', caseType:'Case Type',
-      trustedFormCertUrl:'TrustedForm Certificate URL', jornayaLeadId:'Jornaya Lead ID',
-      tcpaText:'TCPA Consent', facebookLeadId:'Facebook Lead ID',
-      publisherSub:'Publisher Sub ID', notes:'Additional Notes',
-      ipAddress:'IP Address', userAgent:'User Agent', landingPageUrl:'Landing Page URL',
-    };
-    var label = (cfg.fieldLabels && cfg.fieldLabels[name]) || FIELD_LABELS[name] || name;
-    var type    = FIELD_TYPES[name] || 'text';
-    var ph      = FIELD_PLACEHOLDERS[name] || '';
-    var wrapper = document.createElement('div');
-    wrapper.className = 'form-group';
+  function buildField(name, required, label){
+    var wrap = document.createElement('div');
+    wrap.className = 'form-group';
 
     var lbl = document.createElement('label');
+    lbl.setAttribute('for','field-'+name);
     lbl.textContent = label;
-    if(required){
-      var req = document.createElement('span');
-      req.className = 'req';
-      req.textContent = '*';
-      lbl.appendChild(req);
-    }
-    wrapper.appendChild(lbl);
+    if(required){ var star=document.createElement('span'); star.className='req-star'; star.textContent='*'; lbl.appendChild(star); }
+    wrap.appendChild(lbl);
 
+    var type = FIELD_TYPES[name] || 'text';
     var input;
-    if(type === 'select'){
-      input = document.createElement('select');
-      var def = document.createElement('option');
-      def.value = ''; def.textContent = '— Select —';
-      input.appendChild(def);
 
-      // Different options per field
-      if(name === 'gender'){
-        ['Male','Female','Other'].forEach(function(v){
-          var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o);
-        });
-      } else if(name === 'atFault' || name === 'hasAttorney' || name === 'hasInsurance'){
-        ['Yes','No'].forEach(function(v){
-          var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o);
-        });
-      } else if(name === 'incidentState'){
-        // Full state names for incidentState
-        ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
-         'Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
-         'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan',
-         'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada',
-         'New Hampshire','New Jersey','New Mexico','New York','North Carolina',
-         'North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island',
-         'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont',
-         'Virginia','Washington','West Virginia','Wisconsin','Wyoming'
-        ].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; input.appendChild(o); });
-      } else {
-        // Default: 2-letter state codes
-        STATES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
-      }
-    } else if(type === 'textarea'){
-      input = document.createElement('textarea');
-      input.rows = name === 'caseDescription' || name === 'tcpaText' ? 4 : 2;
-      input.placeholder = ph;
-    } else if(name === 'haveAttorney' || name === 'usedRoundup'){
+    if(name === 'haveAttorney' || name === 'usedRoundup'){
       input = document.createElement('select');
-      input.id='field-'+name; input.name=name; if(required) input.required=true;
-      var opts0 = name==='haveAttorney' ? ['','Yes','No'] : ['','Yes','No'];
-      var ph0   = name==='haveAttorney' ? 'Do you have an attorney?' : 'Were you exposed to Roundup?';
-      opts0.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||ph0; input.appendChild(o); });
+      var ph = name==='haveAttorney' ? 'Do you have an attorney?' : 'Were you exposed to Roundup?';
+      [['','-- '+ph+' --'],['Yes','Yes'],['No','No']].forEach(function(v){ var o=document.createElement('option'); o.value=v[0]; o.textContent=v[1]; input.appendChild(o); });
     } else if(name === 'whichCancer'){
       input = document.createElement('select');
-      input.id='field-'+name; input.name=name; if(required) input.required=true;
-      ['','B-Cell Lymphoma','Chronic Lymphocytic Leukemia (CLL)','Hairy Cell Leukemia','Mantle Cell Lymphoma (MCL)','Non-Hodgkin's Lymphoma (NHL)','T-Cell Lymphoma','Other cancer','No cancer'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select cancer type'; input.appendChild(o); });
+      ['','B-Cell Lymphoma','Chronic Lymphocytic Leukemia (CLL)','Hairy Cell Leukemia','Mantle Cell Lymphoma (MCL)','Non-Hodgkin\'s Lymphoma (NHL)','T-Cell Lymphoma','Other cancer','No cancer'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select cancer type --'; input.appendChild(o); });
     } else if(name === 'whatYear'){
       input = document.createElement('select');
-      input.id='field-'+name; input.name=name; if(required) input.required=true;
-      ['','2020 or After','Before 2020'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select year'; input.appendChild(o); });
+      ['','2020 or After','Before 2020'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select year range --'; input.appendChild(o); });
     } else if(name === 'exposedLocation'){
       input = document.createElement('select');
-      input.id='field-'+name; input.name=name; if(required) input.required=true;
-      ['','Work','Home','Both'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'Select location'; input.appendChild(o); });
-    } else if(type === 'select') {
-      // Fallback for any select field not explicitly handled
+      ['','Work','Home','Both'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select location --'; input.appendChild(o); });
+    } else if(name === 'gender'){
       input = document.createElement('select');
-      input.id = 'field-'+name;
-      input.name = name;
-      if(required) input.required = true;
-      var defOpt = document.createElement('option');
-      defOpt.value = ''; defOpt.textContent = '— Select —';
-      input.appendChild(defOpt);
-      ['Yes','No'].forEach(function(v){
-        var o = document.createElement('option');
-        o.value = v; o.textContent = v;
-        input.appendChild(o);
-      });
+      ['','Male','Female','Other'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select --'; input.appendChild(o); });
+    } else if(name === 'state'){
+      input = document.createElement('select');
+      var defO=document.createElement('option'); defO.value=''; defO.textContent='-- Select state --'; input.appendChild(defO);
+      STATES_2.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
+    } else if(name === 'incidentState'){
+      input = document.createElement('select');
+      var defO2=document.createElement('option'); defO2.value=''; defO2.textContent='-- Select state --'; input.appendChild(defO2);
+      STATES_FULL.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
+    } else if(name === 'atFault' || name === 'hasAttorney' || name === 'hasInsurance'){
+      input = document.createElement('select');
+      ['','Yes','No'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select --'; input.appendChild(o); });
+    } else if(type === 'textarea'){
+      input = document.createElement('textarea');
+      var hints = {caseDescription:'Include: incident date, at fault, injury type, representation, insurance',notes:'Any additional details...'};
+      if(hints[name]) input.placeholder = hints[name];
     } else {
       input = document.createElement('input');
       input.type = type;
-      input.placeholder = ph;
-      if(name === 'phone') input.maxLength = 10;
-      if(name === 'zip')   input.maxLength = 5;
+      var placeholders = {firstName:'Jane',lastName:'Smith',email:'jane@email.com',phone:'3105550123',zip:'90001',street:'123 Main St',city:'Los Angeles',trustedFormCertUrl:'https://cert.trustedform.com/...',jornayaLeadId:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',ipAddress:'127.0.0.1'};
+      if(placeholders[name]) input.placeholder = placeholders[name];
+      if(name==='phone'){ input.setAttribute('inputmode','numeric'); input.maxLength=10; var hint=document.createElement('div'); hint.className='hint'; hint.textContent='10 digits, no dashes'; wrap.appendChild(lbl); wrap.appendChild(input); wrap.appendChild(hint); input.id='field-'+name; input.name=name; if(required) input.required=true; return wrap; }
+      if(name==='zip') input.maxLength=5;
     }
+
+    input.id   = 'field-'+name;
     input.name = name;
-    input.id   = 'field-' + name;
-    if(required) input.dataset.required = 'true';
-    wrapper.appendChild(input);
-
-    if(name === 'phone'){
-      var note = document.createElement('div');
-      note.className = 'note';
-      note.textContent = '10 digits, no dashes';
-      wrapper.appendChild(note);
-    }
-
-    var errDiv = document.createElement('div');
-    errDiv.className = 'field-error';
-    errDiv.id = 'err-' + name;
-    errDiv.textContent = label + ' is required';
-    wrapper.appendChild(errDiv);
-
-    return wrapper;
+    if(required) input.required = true;
+    wrap.appendChild(input);
+    return wrap;
   }
 
-  // ── Form handlers ─────────────────────────────────────────────
-  function setupFormHandlers(){
-    var form = document.getElementById('lead-form');
+  // ── Submit ────────────────────────────────────────────────
+  async function submitLead(){
+    var btn = document.getElementById('submit-btn');
+    var result = document.getElementById('result-msg');
+    result.style.display = 'none';
 
-    // Phone digits only
-    var phoneEl = document.getElementById('field-phone');
-    if(phoneEl){
-      phoneEl.addEventListener('input', function(){
-        this.value = this.value.replace(/\D/g,'').slice(0,10);
-        clearErr('phone');
-      });
-    }
+    // Collect all fields
+    var data = { websource: websource };
+    var req = campaignConfig ? (campaignConfig.required||[]) : [];
+    var opt = campaignConfig ? (campaignConfig.optional||[]) : [];
+    var allFields = req.concat(opt);
 
-    // Clear errors on input
-    form.querySelectorAll('input, select, textarea').forEach(function(el){
-      el.addEventListener('input',  function(){ clearErr(this.name); });
-      el.addEventListener('change', function(){ clearErr(this.name); });
+    allFields.forEach(function(name){
+      var el = document.getElementById('field-'+name);
+      if(el && el.value.trim()) data[name] = el.value.trim();
     });
 
-    form.addEventListener('submit', handleSubmit);
-  }
+    // Always include publisherSub from URL
+    if(pubSub) data.publisherSub = pubSub;
 
-  function clearErr(name){
-    var el  = document.getElementById('field-'+name);
-    var err = document.getElementById('err-'+name);
-    if(el)  el.classList.remove('invalid');
-    if(err) err.classList.remove('show');
-  }
-
-  function showErr(name, msg){
-    var el  = document.getElementById('field-'+name);
-    var err = document.getElementById('err-'+name);
-    if(el)  el.classList.add('invalid');
-    if(err){ if(msg) err.textContent=msg; err.classList.add('show'); }
-  }
-
-  function validate(){
-    var ok = true;
-    document.querySelectorAll('.invalid').forEach(function(e){ e.classList.remove('invalid'); });
-    document.querySelectorAll('.field-error.show').forEach(function(e){ e.classList.remove('show'); });
-
-    if(!campaignConfig) return false;
-
-    campaignConfig.required.forEach(function(name){
-      var el  = document.getElementById('field-'+name);
-      var val = el ? el.value.trim() : '';
-      if(!val){ showErr(name); ok=false; }
+    // Validate required
+    var missing = req.filter(function(name){
+      var el = document.getElementById('field-'+name);
+      return !el || !el.value.trim();
     });
-
-    var emailEl = document.getElementById('field-email');
-    if(emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){
-      showErr('email','Enter a valid email address'); ok=false;
-    }
-
-    var phoneEl = document.getElementById('field-phone');
-    if(phoneEl && phoneEl.value.replace(/\D/g,'').length < 10){
-      showErr('phone','Phone must be 10 digits'); ok=false;
-    }
-
-    return ok;
-  }
-
-  async function handleSubmit(e){
-    e.preventDefault();
-    if(!validate()){
-      var first = document.querySelector('.invalid');
-      if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+    if(missing.length){
+      result.className = 'result error';
+      result.textContent = 'Please fill in all required fields: '+missing.map(function(n){ return FIELD_LABELS[n]||n; }).join(', ');
+      result.style.display = '';
       return;
     }
 
-    var btn    = document.getElementById('submit-btn');
-    var result = document.getElementById('result');
-    btn.disabled = true;
-    btn.textContent = 'Submitting...';
-    result.style.display = 'none';
-
-    // Build payload from all fields
-    var data = { websource: websource };
-    var allFields = campaignConfig.required.concat(campaignConfig.optional);
-    allFields.forEach(function(name){
-      var el = document.getElementById('field-'+name);
-      if(el){
-        var val = el.value.trim();
-        if(val) data[name] = val;
-      }
-    });
-    // Override publisherSub with URL param if present
-    if(pubSub) data.publisherSub = pubSub;
-    // Phone: digits only
+    // Validate phone
+    if(data.phone && !/^\d{10}$/.test(data.phone.replace(/\D/g,''))){
+      result.className = 'result error';
+      result.textContent = 'Phone must be 10 digits, no dashes or spaces.';
+      result.style.display = '';
+      return;
+    }
     if(data.phone) data.phone = data.phone.replace(/\D/g,'');
 
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
     try{
-      var res  = await fetch(API_BASE + '/lead/' + campaign, {
+      var res = await fetch(API_BASE+'/lead/'+campaign, {
         method:  'POST',
         headers: {'Content-Type':'application/json','x-api-key':API_KEY},
         body:    JSON.stringify(data),
       });
-      var resp = await res.json();
-      if(resp.status === 'received'){
-        result.className   = 'result success';
-        result.textContent = '✓ Lead accepted. Reference ID: ' + resp.leadId;
-        document.getElementById('lead-form').reset();
-        if(pubSub && document.getElementById('field-publisherSub'))
-          document.getElementById('field-publisherSub').value = pubSub;
+      var d = await res.json();
+
+      if(d.status === 'received' || d.ok || res.ok){
+        document.getElementById('state-loading').style.display = 'none';
+        document.getElementById('lead-form').style.display     = 'none';
+        document.getElementById('state-success').style.display = '';
+        document.getElementById('success-id').textContent      = d.leadId || d.id || '';
       } else {
-        result.className   = 'result error';
-        result.textContent = '✕ ' + (resp.reason || 'Submission failed. Check all required fields.');
+        throw new Error(d.reason || d.error || 'Submission failed');
       }
     } catch(err){
-      result.className   = 'result error';
-      result.textContent = '✕ Connection error: ' + err.message;
+      result.className = 'result error';
+      result.textContent = 'Error: '+err.message+'. Please try again.';
+      result.style.display = '';
+      btn.disabled = false;
+      btn.textContent = 'Submit Lead';
     }
-
-    result.style.display = 'block';
-    btn.disabled    = false;
-    btn.textContent = 'Submit Lead';
   }
 
-  // ── Posting Instructions ──────────────────────────────────────
-  function showInstructions(){
-    if(!campaignConfig) return;
-    var sub     = pubSub || 'YOUR_SUB_ID';
-    var formUrl = window.location.origin + window.location.pathname + '?campaign=' + campaign + '&sub=' + sub;
-    var apiUrl  = API_BASE + '/lead/' + campaign;
-    var line    = '─'.repeat(52);
-    var dline   = '='.repeat(52);
-
-    var reqLines = campaignConfig.required.map(function(f){
-      var label = (campaignConfig.fieldLabels && campaignConfig.fieldLabels[f]) || f;
-      return '  ' + f.padEnd(18) + '* string    ' + label;
-    }).join('\n');
-
-    var optLines = campaignConfig.optional.filter(function(f){
-      return !['publisherSub'].includes(f);
-    }).map(function(f){
-      var label = (campaignConfig.fieldLabels && campaignConfig.fieldLabels[f]) || f;
-      return '  ' + f.padEnd(20) + 'string    ' + label;
-    }).join('\n');
-
-    var examplePayload = '{\n' +
-      campaignConfig.required.map(function(f){
-        var ex = {firstName:'Jane',lastName:'Smith',email:'jane@gmail.com',phone:'3105550123'};
-        return '  "'+f+'": "'+(ex[f]||'example')+'"';
-      }).join(',\n') +
-      ',\n  "publisherSub": "'+sub+'"\n}';
-
-    var txt =
-dline+'\n'+
-campaignConfig.name.toUpperCase()+' — PUBLISHER POSTING INSTRUCTIONS\n'+
-dline+'\n\n'+
-'CAMPAIGN:      '+campaignConfig.name+'\n'+
-'VERTICAL:      '+campaignConfig.vertical+'\n'+
-'PUBLISHER ID:  '+sub+'\n'+
-'FORM URL:      '+formUrl+'\n\n'+
-line+'\n'+
-'API ENDPOINT\n'+
-line+'\n\n'+
-'Method:   POST\n'+
-'URL:      '+apiUrl+'\n\n'+
-'Headers:\n'+
-'  Content-Type:  application/json\n'+
-'  x-api-key:     '+API_KEY+'\n\n'+
-line+'\n'+
-'REQUIRED FIELDS  (* must be included or submission will fail)\n'+
-line+'\n\n'+
-reqLines+'\n\n'+
-line+'\n'+
-'OPTIONAL FIELDS\n'+
-line+'\n\n'+
-optLines+'\n\n'+
-line+'\n'+
-'EXAMPLE PAYLOAD\n'+
-line+'\n\n'+
-examplePayload+'\n\n'+
-line+'\n'+
-'RESPONSES\n'+
-line+'\n\n'+
-'Accepted:  {"status":"received","leadId":"KRW-'+campaign.toUpperCase()+'-123"}\n'+
-'Rejected:  {"status":"rejected","reason":"Missing required fields: phone"}\n\n'+
-line+'\n'+
-'NOTES\n'+
-line+'\n\n'+
-'* Phone must be 10 digits — strip all formatting before sending\n'+
-'* publisherSub auto-appended when using the form URL above\n'+
-'* Save the leadId from each response for your own tracking\n'+
-'* You are responsible for TrustedForm / Jornaya data\n'+
-dline;
-
-    document.getElementById('instructions-text').textContent = txt;
-    document.getElementById('copy-btn').textContent = 'Copy to Clipboard';
-    document.getElementById('copy-btn').classList.remove('copied');
-    document.getElementById('instructions-modal').classList.add('open');
+  // ── Load campaign config ──────────────────────────────────
+  async function init(){
+    if(!campaign){
+      document.getElementById('state-loading').style.display='none';
+      document.getElementById('state-error').style.display='';
+      document.getElementById('error-msg').textContent='No campaign specified in URL.';
+      return;
+    }
+    try{
+      var res = await fetch(API_BASE+'/campaigns/'+campaign+'/config');
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      var cfg = await res.json();
+      if(!cfg.ok) throw new Error(cfg.error||'Campaign not found: '+campaign);
+      campaignConfig = cfg;
+      buildForm(cfg);
+    } catch(err){
+      document.getElementById('state-loading').style.display='none';
+      document.getElementById('state-error').style.display='';
+      document.getElementById('error-msg').textContent=err.message+'. Check the campaign parameter in the URL.';
+    }
   }
 
-  function closeInstructions(){
-    document.getElementById('instructions-modal').classList.remove('open');
-  }
-
-  function copyInstructions(){
-    var text = document.getElementById('instructions-text').textContent;
-    navigator.clipboard.writeText(text).then(function(){
-      var b = document.getElementById('copy-btn');
-      b.textContent='✓ Copied!'; b.classList.add('copied');
-      setTimeout(function(){ b.textContent='Copy to Clipboard'; b.classList.remove('copied'); },2500);
-    }).catch(function(){
-      var ta=document.createElement('textarea');
-      ta.value=text; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      document.getElementById('copy-btn').textContent='✓ Copied!';
-    });
-  }
-
-  document.getElementById('instructions-modal').addEventListener('click',function(e){
-    if(e.target===this) closeInstructions();
-  });
-
-  // Load on page ready
-  loadCampaign();
+  init();
 </script>
 </body>
 </html>
