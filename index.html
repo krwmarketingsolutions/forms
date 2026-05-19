@@ -5,306 +5,412 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>KRW Marketing Solutions</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f4;min-height:100vh;}
-.page-wrap{max-width:680px;margin:0 auto;padding:16px;}
-.form-header{background:#1a2744;color:#fff;border-radius:10px 10px 0 0;padding:24px 28px;}
-.form-header h1{font-size:20px;font-weight:700;margin-bottom:4px;}
-.form-header p{font-size:13px;opacity:.75;}
-.form-card{background:#fff;border-radius:0 0 10px 10px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.08);}
-.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid #eee;}
-.form-group{margin-bottom:14px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.form-group label{display:block;font-size:11px;font-weight:600;color:#444;margin-bottom:5px;}
-.form-group label .req{color:#e53e3e;margin-left:2px;}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:14px;color:#222;background:#fff;transition:border-color .15s;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#3b6fd4;box-shadow:0 0 0 3px rgba(59,111,212,.1);}
-.submit-btn{width:100%;padding:13px;background:#1a2744;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:20px;transition:background .15s;}
-.submit-btn:hover{background:#243a6a;}
-.submit-btn:disabled{background:#aaa;cursor:not-allowed;}
-.result{padding:12px 16px;border-radius:6px;font-size:13px;margin-top:14px;display:none;}
-.result.error{background:#fff5f5;border:1px solid #fc8181;color:#c53030;}
-#state-loading{text-align:center;padding:48px 0;color:#888;font-size:14px;}
-#state-error{background:#fff5f5;border:1px solid #fc8181;border-radius:8px;padding:20px 24px;color:#c53030;display:none;}
-#state-error h3{font-size:15px;margin-bottom:6px;}
-#state-success{background:#f0fff4;border:1px solid #68d391;border-radius:8px;padding:28px;text-align:center;display:none;}
-#state-success h2{color:#276749;font-size:20px;margin-bottom:8px;}
-#state-success p{color:#555;font-size:14px;}
-#lead-form{display:none;}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid #ccc;border-top-color:#1a2744;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f4f4f4; min-height:100vh; }
+  .page-wrap{ max-width:680px; margin:0 auto; padding:16px; }
+
+  /* Header */
+  .form-header{ background:#1a2744; color:#fff; border-radius:10px 10px 0 0; padding:24px 28px; }
+  .form-header h1{ font-size:20px; font-weight:700; margin-bottom:4px; }
+  .form-header p{ font-size:13px; opacity:.75; }
+
+  /* Card */
+  .form-card{ background:#fff; border-radius:0 0 10px 10px; padding:28px; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+
+  /* Section labels */
+  .section-label{ font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#888; margin:20px 0 10px; padding-bottom:6px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:8px; }
+  .optional-badge{ background:#f0f0f0; color:#999; font-size:9px; padding:2px 6px; border-radius:10px; font-weight:600; }
+
+  /* Form groups */
+  .form-group{ margin-bottom:14px; }
+  .form-group label{ display:block; font-size:11px; font-weight:600; color:#444; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
+  .req-star{ color:#e53e3e; margin-left:3px; }
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; padding:11px 13px; border:1.5px solid #ddd; border-radius:7px;
+    font-size:14px; color:#222; background:#fff; transition:border .15s;
+    appearance:none; -webkit-appearance:none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none; border-color:#2563eb;
+  }
+  .form-group .hint{ font-size:11px; color:#999; margin-top:4px; }
+  .form-group textarea{ resize:vertical; min-height:80px; }
+
+  /* Row layouts */
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-row-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  @media(max-width:500px){ .form-row,.form-row-3{ grid-template-columns:1fr; } }
+
+  /* Submit button */
+  .submit-btn{ width:100%; padding:14px; background:#16a34a; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; margin-top:20px; transition:background .15s; }
+  .submit-btn:hover:not(:disabled){ background:#15803d; }
+  .submit-btn:disabled{ background:#aaa; cursor:not-allowed; }
+
+  /* States */
+  .result{ margin-top:16px; padding:14px 16px; border-radius:8px; font-size:13px; display:none; }
+  .result.success{ background:#dcfce7; color:#166534; border:1px solid #86efac; }
+  .result.error{ background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+
+  /* Loading / error states */
+  .state-box{ text-align:center; padding:48px 24px; }
+  .state-box h2{ font-size:18px; font-weight:600; margin-bottom:8px; }
+  .state-box p{ font-size:13px; color:#666; }
+  .spinner{ width:36px; height:36px; border:3px solid #e5e7eb; border-top-color:#2563eb; border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 16px; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .error-icon{ font-size:36px; margin-bottom:12px; }
 </style>
 </head>
 <body>
 <div class="page-wrap">
   <div class="form-header">
-    <h1>KRW Marketing Solutions</h1>
+    <h1 id="form-title">KRW Marketing Solutions</h1>
     <p id="form-subtitle">Lead Submission Form</p>
   </div>
   <div class="form-card">
-    <div id="state-loading"><span class="spinner"></span> Loading form...</div>
-    <div id="state-error"><h3>⚠️ Campaign not found</h3><p id="error-msg"></p></div>
-    <form id="lead-form" onsubmit="submitLead(event)">
+    <!-- Loading -->
+    <div id="state-loading" class="state-box">
+      <div class="spinner"></div>
+      <p>Loading form...</p>
+    </div>
+    <!-- Error -->
+    <div id="state-error" class="state-box" style="display:none">
+      <div class="error-icon">⚠️</div>
+      <h2 style="color:#991b1b">Campaign not found</h2>
+      <p id="error-msg">Check the URL and try again.</p>
+    </div>
+    <!-- Success -->
+    <div id="state-success" class="state-box" style="display:none">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <h2 style="color:#166534">Lead Submitted!</h2>
+      <p>Your lead has been received. Lead ID: <strong id="success-id"></strong></p>
+    </div>
+    <!-- Form -->
+    <div id="lead-form" style="display:none">
       <div id="form-fields"></div>
-      <button type="submit" class="submit-btn" id="submit-btn">Submit Lead</button>
+      <button class="submit-btn" id="submit-btn">Submit Lead</button>
       <div class="result" id="result-msg"></div>
-    </form>
-    <div id="state-success">
-      <h2>✅ Lead Submitted</h2>
-      <p>Reference ID: <strong id="success-id"></strong></p>
-      <p style="margin-top:8px;font-size:13px;color:#888;">Thank you. Your lead has been received.</p>
     </div>
   </div>
 </div>
+
 <script>
   var API_BASE = 'https://krw-backend-production.up.railway.app';
   var API_KEY  = 'krwleads2026secure';
+
   var params   = new URLSearchParams(window.location.search);
   var campaign = (params.get('campaign')||'').toLowerCase().trim();
-  var pubSub   = params.get('sub') || params.get('publisher_sub') || '';
+  var pubSub   = params.get('sub') || '';
+  var websource= window.location.href;
+
   var campaignConfig = null;
 
-  var FIELD_LABELS = {
-    firstName:'First Name',lastName:'Last Name',email:'Email Address',
-    phone:'Phone Number',dateOfBirth:'Date of Birth',street:'Street Address',
-    city:'City',state:'State',zip:'Zip Code',zipcode:'Zip Code',
-    notes:'Additional Notes',trustedFormCertUrl:'TrustedForm Certificate URL',
-    jornayaLeadId:'Jornaya Lead ID',publisherSub:'Publisher Sub ID',
-    websource:'Landing Page URL',ipAddress:'IP Address',
-    incidentState:'State of Incident',incidentDate:'Date Incident Occurred (MM/DD/YYYY)',
-    incidentStateText:'State Where Incident Occurred',
-    gender:'Gender',rideshareGender:'What Is Your Gender?',
-    sexuallyAssaulted:'Were You Sexually Assaulted by a Rideshare Driver?',
-    rideshareCompany:'Rideshare Company (Uber or Lyft)',
-    driverOrPassenger:'Were You the Driver or Passenger?',
-    abuseType:'What Type of Abuse Did You Experience?',
-    hasReceipt:'Do You Have a Rideshare Receipt?',
-    fraudConviction:'Have You Ever Been Convicted for Fraud?',
-    reportedTo:'Who Was the Incident Reported To?',
-    bestTimeToCall:'Best Time to Reach You?',
-    haveAttorney:'Do You Currently Have an Attorney?',
-    usedRoundup:'Were You Exposed to Roundup Herbicide?',
-    whichCancer:'Cancer Diagnosis',whatYear:'Year Diagnosed',
-    exposedLocation:'Where Were You Primarily Exposed?',
-    caseDescription:'Case Description',tcpaText:'TCPA Consent Text',
+  // ── Field definitions ─────────────────────────────────────
+  var FIELD_TYPES = {
+    firstName:'text', lastName:'text', email:'email', phone:'tel',
+    street:'text', city:'text', state:'select', zip:'text',
+    dateOfBirth:'date', gender:'select', age:'number',
+    incidentState:'select', incidentDate:'date',
+    caseDescription:'textarea', injuryType:'text',
+    atFault:'select', hasAttorney:'select', hasInsurance:'select',
+    trustedFormCertUrl:'text', jornayaLeadId:'text',
+    tcpaText:'textarea', publisherSub:'text',
+    ipAddress:'text', userAgent:'text', landingPageUrl:'text',
+    notes:'textarea',
+    haveAttorney:'select', usedRoundup:'select',
+    whichCancer:'select', whatYear:'select', exposedLocation:'select',
+    rideshareGender:'select', sexuallyAssaulted:'select', rideshareCompany:'select',
+    driverOrPassenger:'select', abuseType:'select', hasReceipt:'select',
+    fraudConviction:'select', reportedTo:'select', bestTimeToCall:'select',
+    incidentStateText:'text',
   };
 
-  var US_STATES = [
-    ['','-- Select State --'],['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],
-    ['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],
-    ['DE','Delaware'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],
-    ['ID','Idaho'],['IL','Illinois'],['IN','Indiana'],['IA','Iowa'],
-    ['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],
-    ['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],
-    ['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],
-    ['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],
-    ['NY','New York'],['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],
-    ['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],
-    ['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],
-    ['UT','Utah'],['VT','Vermont'],['VA','Virginia'],['WA','Washington'],
-    ['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming'],['DC','District of Columbia'],
-  ];
+  var FIELD_LABELS = {
+    firstName:'First Name', lastName:'Last Name',
+    email:'Email Address', phone:'Cell Phone',
+    street:'Street Address', city:'City', state:'State', zip:'Zip Code',
+    dateOfBirth:'Date of Birth', gender:'Gender',
+    incidentState:'State Where Incident Occurred',
+    incidentDate:'Incident Date', caseDescription:'Case Description',
+    injuryType:'Type of Injury', atFault:'Were You At Fault?',
+    hasAttorney:'Do You Have an Attorney?',
+    hasInsurance:'Do You Have Insurance?',
+    trustedFormCertUrl:'TrustedForm Certificate URL',
+    jornayaLeadId:'Jornaya Lead ID', tcpaText:'TCPA Consent',
+    publisherSub:'Publisher Sub ID', ipAddress:'IP Address',
+    userAgent:'User Agent', landingPageUrl:'Landing Page URL',
+    notes:'Additional Notes',
+    rideshareGender:'What Is Your Gender?',
+    sexuallyAssaulted:'Were You Sexually Assaulted by a Rideshare Driver?',
+    rideshareCompany:'What Is the Name of the Rideshare Company?',
+    driverOrPassenger:'Were You the Driver or Passenger?',
+    abuseType:'What Type of Abuse Did You Experience?',
+    incidentDate:'What Date Did the Incident Occur? (DD/MM/YYYY)',
+    incidentStateText:'What State Did the Incident Occur In?',
+    hasReceipt:'Do You Have a Rideshare Receipt for This Incident?',
+    fraudConviction:'Have You Ever Been Convicted for Any Type of Fraud?',
+    reportedTo:'Have You Reported the Incident to Any of the Following?',
+    bestTimeToCall:'When Is the Best Time to Reach You?',
+    // Roundup
+    haveAttorney:'Do You Have an Attorney?',
+    usedRoundup:'Were You or a Loved One Exposed to Roundup?',
+    whichCancer:'Cancer Diagnosis',
+    whatYear:'Year Diagnosed',
+    exposedLocation:'Where Were You Exposed to Roundup?',
+  };
 
-  function buildField(name, required, cfg) {
-    var wrap = document.createElement('div');
-    wrap.className = 'form-group';
-    var label = document.createElement('label');
-    label.htmlFor = 'field-'+name;
-    var ltext = (cfg.fieldLabels && cfg.fieldLabels[name]) || FIELD_LABELS[name] || name;
-    label.innerHTML = ltext + (required ? '<span class="req">*</span>' : '');
-    wrap.appendChild(label);
+  var STATES_2 = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+  var STATES_FULL = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 
-    var input;
+  // ── Build form ────────────────────────────────────────────
+  function buildForm(cfg){
+    document.getElementById('form-title').textContent    = cfg.name || 'KRW Marketing Solutions';
+    document.getElementById('form-subtitle').textContent = cfg.description || cfg.vertical+' — Lead Submission';
 
-    if (name === 'state' || name === 'incidentState') {
-      input = document.createElement('select');
-      US_STATES.forEach(function(s){ var o=document.createElement('option');o.value=s[0];o.textContent=s[1];input.appendChild(o); });
-
-    } else if (name === 'rideshareGender') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938095','Female'],['938096','Male (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'sexuallyAssaulted') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938097','Yes'],['938098','No (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'rideshareCompany') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938043','Uber'],['938042','Lyft'],['938044','Other (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'driverOrPassenger') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938060','Passenger'],['938061','Driver (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'abuseType') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938062','Sexual Assault'],['938063','Sexual Harassment'],['938064','Unwanted Touching'],['938065','Other']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'hasReceipt') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938099','Yes'],['938100','No']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'fraudConviction') {
-      input = document.createElement('select');
-      [['','-- Select --'],['938102','No'],['938101','Yes (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'reportedTo') {
-      input = document.createElement('select');
-      [['','-- Select --'],['1236409','No One'],['1236407','Police'],['1236406','Medical Professional'],['1236405','Rideshare Company'],['1236408','Therapist'],['1236404','Family / Friends']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'bestTimeToCall') {
-      input = document.createElement('select');
-      [['','-- Select --'],['295473','Anytime'],['295470','Morning'],['295471','Afternoon'],['295472','Evening']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'gender') {
-      input = document.createElement('select');
-      [['','-- Select --'],['Male','Male'],['Female','Female'],['Other','Other']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'haveAttorney') {
-      input = document.createElement('select');
-      [['','-- Select --'],['Yes','Yes (Disqualifies)'],['No','No']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'usedRoundup') {
-      input = document.createElement('select');
-      [['','-- Select --'],['Yes','Yes'],['No','No (Disqualifies)']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'whichCancer') {
-      input = document.createElement('select');
-      [['','-- Select --'],['B-Cell Lymphoma','B-Cell Lymphoma'],["Non-Hodgkin's Lymphoma","Non-Hodgkin's Lymphoma"],['T-Cell Lymphoma','T-Cell Lymphoma'],['Other Lymphoma','Other Lymphoma']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'whatYear') {
-      input = document.createElement('select');
-      [['','-- Select --'],['2020 or After','2020 or After'],['2015-2019','2015-2019'],['2010-2014','2010-2014'],['Before 2010','Before 2010']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'exposedLocation') {
-      input = document.createElement('select');
-      [['','-- Select --'],['Work','Work'],['Home','Home'],['Farm','Farm'],['Golf Course','Golf Course'],['Other','Other']].forEach(function(v){ var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o); });
-
-    } else if (name === 'notes' || name === 'caseDescription' || name === 'tcpaText') {
-      input = document.createElement('textarea');
-      input.rows = 3;
-
-    } else if (name === 'dateOfBirth') {
-      input = document.createElement('input');
-      input.type = 'date';
-
-    } else if (name === 'email') {
-      input = document.createElement('input');
-      input.type = 'email';
-
-    } else if (name === 'phone') {
-      input = document.createElement('input');
-      input.type = 'tel';
-
-    } else {
-      input = document.createElement('input');
-      input.type = 'text';
-    }
-
-    input.id = 'field-'+name;
-    input.name = name;
-    if (required) input.required = true;
-    if (name === 'publisherSub' && pubSub) { input.value = pubSub; input.readOnly = true; }
-    wrap.appendChild(input);
-    return wrap;
-  }
-
-  function buildForm(cfg) {
-    document.getElementById('form-subtitle').textContent = (cfg.name||campaign) + ' — Lead Submission';
     var container = document.getElementById('form-fields');
     container.innerHTML = '';
 
-    var required = cfg.required || cfg.required_fields || [];
-    var optional = cfg.optional || cfg.optional_fields || [];
+    var req = cfg.required || [];
+    var opt = cfg.optional || [];
+    var labels = cfg.fieldLabels || {};
 
-    if (required.length) {
-      var s1 = document.createElement('div'); s1.className='section-label'; s1.textContent='Required Information'; container.appendChild(s1);
-      var paired = [];
-      [['firstName','lastName'],['email','phone']].forEach(function(p){
-        if (required.indexOf(p[0])>-1 && required.indexOf(p[1])>-1) {
-          var row=document.createElement('div'); row.className='form-row';
-          row.appendChild(buildField(p[0],true,cfg));
-          row.appendChild(buildField(p[1],true,cfg));
-          container.appendChild(row);
-          paired.push(p[0]); paired.push(p[1]);
-        }
+    function getLabel(name){ return labels[name] || FIELD_LABELS[name] || name.replace(/([A-Z])/g,' $1').replace(/^./,function(s){return s.toUpperCase();}); }
+
+    // Required section
+    if(req.length){
+      var secReq = document.createElement('div');
+      secReq.className = 'section-label';
+      secReq.textContent = 'Required Information';
+      container.appendChild(secReq);
+
+      var rendered = {};
+      // Pair firstName+lastName, email+phone side by side
+      [['firstName','lastName'],['email','phone']].forEach(function(pair){
+        var both = pair.filter(function(n){ return req.includes(n); });
+        if(!both.length) return;
+        var row = document.createElement('div');
+        row.className = 'form-row';
+        both.forEach(function(name){ row.appendChild(buildField(name, true, getLabel(name))); rendered[name]=true; });
+        container.appendChild(row);
       });
-      required.forEach(function(name){ if(paired.indexOf(name)===-1) container.appendChild(buildField(name,true,cfg)); });
+      // Remaining required fields
+      req.forEach(function(name){
+        if(rendered[name]) return;
+        container.appendChild(buildField(name, true, getLabel(name)));
+      });
     }
 
-    if (optional.length) {
-      var s2=document.createElement('div'); s2.className='section-label'; s2.textContent='Optional Information'; container.appendChild(s2);
-      optional.forEach(function(name){ container.appendChild(buildField(name,false,cfg)); });
+    // Optional section
+    var visOpt = opt.filter(function(f){
+      return !['publisherSub','publisherSub2','ipAddress','userAgent','landingPageUrl','facebookLeadId','websource'].includes(f);
+    });
+    if(visOpt.length){
+      var secOpt = document.createElement('div');
+      secOpt.className = 'section-label';
+      secOpt.innerHTML = 'Additional Information <span class="optional-badge">Optional</span>';
+      container.appendChild(secOpt);
+
+      // Address group
+      var addrFields = ['street','city','state','zip'].filter(function(f){ return visOpt.includes(f); });
+      if(addrFields.length){
+        if(visOpt.includes('street')) container.appendChild(buildField('street',false,getLabel('street')));
+        var addrRow = document.createElement('div');
+        addrRow.className = 'form-row-3';
+        ['city','state','zip'].forEach(function(f){ if(visOpt.includes(f)) addrRow.appendChild(buildField(f,false,getLabel(f))); });
+        if(addrRow.children.length) container.appendChild(addrRow);
+      }
+
+      visOpt.filter(function(f){ return !['street','city','state','zip'].includes(f); }).forEach(function(name){
+        container.appendChild(buildField(name, false, getLabel(name)));
+      });
+    }
+
+    // Pre-fill publisherSub
+    if(pubSub){
+      var el = document.getElementById('field-publisherSub');
+      if(el) el.value = pubSub;
     }
 
     document.getElementById('state-loading').style.display = 'none';
     document.getElementById('lead-form').style.display = '';
+
+    document.getElementById('submit-btn').addEventListener('click', submitLead);
   }
 
-  async function submitLead(e) {
-    e.preventDefault();
+  function buildField(name, required, label){
+    var wrap = document.createElement('div');
+    wrap.className = 'form-group';
+
+    var lbl = document.createElement('label');
+    lbl.setAttribute('for','field-'+name);
+    lbl.textContent = label;
+    if(required){ var star=document.createElement('span'); star.className='req-star'; star.textContent='*'; lbl.appendChild(star); }
+    wrap.appendChild(lbl);
+
+    var type = FIELD_TYPES[name] || 'text';
+    var input;
+
+    if(name === 'rideshareGender'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938095','Female'],['938096','Male (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'sexuallyAssaulted'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938038','Yes'],['938039','No (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'rideshareCompany'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938042','Lyft'],['938043','Uber'],['938044','Other (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'driverOrPassenger'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938060','Passenger'],['938059','Driver (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'abuseType'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938070','Masturbation'],['938069','Indecent Exposure'],['938068','Non-Consensual Touching or Kissing'],['938067','Forced Oral Copulation'],['938066','Forced Manual Stimulation'],['938065','Rape/Sodomy'],['938044','Other (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'hasReceipt'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['582455','Yes'],['582456','No (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'fraudConviction'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['938102','No'],['938101','Yes (Disqualifies)']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'reportedTo'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['1236409','No One'],['1236407','Police'],['1236406','Medical Professional'],['1236405','Rideshare Company'],['1236408','Therapist'],['1236404','Family/Friends']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'bestTimeToCall'){
+      input=document.createElement('select');input.id='field-'+name;input.name=name;if(required)input.required=true;
+      [['','-- Select --'],['295473','Anytime'],['295470','Morning'],['295471','Afternoon'],['295472','Evening']].forEach(function(v){var o=document.createElement('option');o.value=v[0];o.textContent=v[1];input.appendChild(o);});
+    } else if(name === 'haveAttorney' || name === 'usedRoundup'){
+      input = document.createElement('select');
+      var ph = name==='haveAttorney' ? 'Do you have an attorney?' : 'Were you exposed to Roundup?';
+      [['','-- '+ph+' --'],['Yes','Yes'],['No','No']].forEach(function(v){ var o=document.createElement('option'); o.value=v[0]; o.textContent=v[1]; input.appendChild(o); });
+    } else if(name === 'whichCancer'){
+      input = document.createElement('select');
+      ['','B-Cell Lymphoma','Chronic Lymphocytic Leukemia (CLL)','Hairy Cell Leukemia','Mantle Cell Lymphoma (MCL)','Non-Hodgkin\'s Lymphoma (NHL)','T-Cell Lymphoma','Other cancer','No cancer'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select cancer type --'; input.appendChild(o); });
+    } else if(name === 'whatYear'){
+      input = document.createElement('select');
+      ['','2020 or After','Before 2020'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select year range --'; input.appendChild(o); });
+    } else if(name === 'exposedLocation'){
+      input = document.createElement('select');
+      ['','Work','Home','Both'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select location --'; input.appendChild(o); });
+    } else if(name === 'gender'){
+      input = document.createElement('select');
+      ['','Male','Female','Other'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select --'; input.appendChild(o); });
+    } else if(name === 'state'){
+      input = document.createElement('select');
+      var defO=document.createElement('option'); defO.value=''; defO.textContent='-- Select state --'; input.appendChild(defO);
+      STATES_2.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
+    } else if(name === 'incidentState'){
+      input = document.createElement('select');
+      var defO2=document.createElement('option'); defO2.value=''; defO2.textContent='-- Select state --'; input.appendChild(defO2);
+      STATES_FULL.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; input.appendChild(o); });
+    } else if(name === 'atFault' || name === 'hasAttorney' || name === 'hasInsurance'){
+      input = document.createElement('select');
+      ['','Yes','No'].forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v||'-- Select --'; input.appendChild(o); });
+    } else if(type === 'textarea'){
+      input = document.createElement('textarea');
+      var hints = {caseDescription:'Include: incident date, at fault, injury type, representation, insurance',notes:'Any additional details...'};
+      if(hints[name]) input.placeholder = hints[name];
+    } else {
+      input = document.createElement('input');
+      input.type = type;
+      var placeholders = {firstName:'Jane',lastName:'Smith',email:'jane@email.com',phone:'3105550123',zip:'90001',street:'123 Main St',city:'Los Angeles',trustedFormCertUrl:'https://cert.trustedform.com/...',jornayaLeadId:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',ipAddress:'127.0.0.1'};
+      if(placeholders[name]) input.placeholder = placeholders[name];
+      if(name==='phone'){ input.setAttribute('inputmode','numeric'); input.maxLength=10; var hint=document.createElement('div'); hint.className='hint'; hint.textContent='10 digits, no dashes'; wrap.appendChild(lbl); wrap.appendChild(input); wrap.appendChild(hint); input.id='field-'+name; input.name=name; if(required) input.required=true; return wrap; }
+      if(name==='zip') input.maxLength=5;
+    }
+
+    input.id   = 'field-'+name;
+    input.name = name;
+    if(required) input.required = true;
+    wrap.appendChild(input);
+    return wrap;
+  }
+
+  // ── Submit ────────────────────────────────────────────────
+  async function submitLead(){
     var btn = document.getElementById('submit-btn');
     var result = document.getElementById('result-msg');
-    result.style.display='none'; result.className='result';
+    result.style.display = 'none';
 
-    var data = {};
-    var required = campaignConfig.required || campaignConfig.required_fields || [];
-    var optional = campaignConfig.optional || campaignConfig.optional_fields || [];
-    required.concat(optional).forEach(function(name){
-      var el=document.getElementById('field-'+name);
-      if(el) data[name]=el.value;
+    // Collect all fields
+    var data = { websource: websource };
+    var req = campaignConfig ? (campaignConfig.required||[]) : [];
+    var opt = campaignConfig ? (campaignConfig.optional||[]) : [];
+    var allFields = req.concat(opt);
+
+    allFields.forEach(function(name){
+      var el = document.getElementById('field-'+name);
+      if(el && el.value.trim()) data[name] = el.value.trim();
     });
-    data.publisherSub = pubSub || data.publisherSub || '';
 
-    var missing = required.filter(function(name){ return !data[name]||!String(data[name]).trim(); });
-    if (missing.length) {
-      result.className='result error';
-      result.textContent='Please fill in: '+missing.map(function(n){return FIELD_LABELS[n]||n;}).join(', ');
-      result.style.display='';
+    // Always include publisherSub from URL
+    if(pubSub) data.publisherSub = pubSub;
+
+    // Validate required
+    var missing = req.filter(function(name){
+      var el = document.getElementById('field-'+name);
+      return !el || !el.value.trim();
+    });
+    if(missing.length){
+      result.className = 'result error';
+      result.textContent = 'Please fill in all required fields: '+missing.map(function(n){ return FIELD_LABELS[n]||n; }).join(', ');
+      result.style.display = '';
       return;
     }
-    if (data.phone) data.phone = data.phone.replace(/\D/g,'');
 
-    btn.disabled=true; btn.textContent='Submitting...';
-    try {
-      var res = await fetch(API_BASE+'/lead/'+campaign,{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':API_KEY},
-        body:JSON.stringify(data),
+    // Validate phone
+    if(data.phone && !/^\d{10}$/.test(data.phone.replace(/\D/g,''))){
+      result.className = 'result error';
+      result.textContent = 'Phone must be 10 digits, no dashes or spaces.';
+      result.style.display = '';
+      return;
+    }
+    if(data.phone) data.phone = data.phone.replace(/\D/g,'');
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try{
+      var res = await fetch(API_BASE+'/lead/'+campaign, {
+        method:  'POST',
+        headers: {'Content-Type':'application/json','x-api-key':API_KEY},
+        body:    JSON.stringify(data),
       });
       var d = await res.json();
-      if (d.status==='received'||d.ok||res.ok) {
-        document.getElementById('lead-form').style.display='none';
-        document.getElementById('state-success').style.display='';
-        document.getElementById('success-id').textContent=d.leadId||d.id||'';
-      } else { throw new Error(d.reason||d.error||'Submission failed'); }
-    } catch(err) {
-      result.className='result error';
-      result.textContent='Error: '+err.message+'. Please try again.';
-      result.style.display='';
-      btn.disabled=false; btn.textContent='Submit Lead';
+
+      if(d.status === 'received' || d.ok || res.ok){
+        document.getElementById('state-loading').style.display = 'none';
+        document.getElementById('lead-form').style.display     = 'none';
+        document.getElementById('state-success').style.display = '';
+        document.getElementById('success-id').textContent      = d.leadId || d.id || '';
+      } else {
+        throw new Error(d.reason || d.error || 'Submission failed');
+      }
+    } catch(err){
+      result.className = 'result error';
+      result.textContent = 'Error: '+err.message+'. Please try again.';
+      result.style.display = '';
+      btn.disabled = false;
+      btn.textContent = 'Submit Lead';
     }
   }
 
-  async function init() {
-    if (!campaign) {
+  // ── Load campaign config ──────────────────────────────────
+  async function init(){
+    if(!campaign){
       document.getElementById('state-loading').style.display='none';
       document.getElementById('state-error').style.display='';
       document.getElementById('error-msg').textContent='No campaign specified in URL.';
       return;
     }
-    try {
+    try{
       var res = await fetch(API_BASE+'/campaigns/'+campaign+'/config');
-      if (!res.ok) throw new Error('HTTP '+res.status+'. Check the campaign parameter in the URL.');
+      if(!res.ok) throw new Error('HTTP '+res.status);
       var cfg = await res.json();
-      if (!cfg.ok) throw new Error(cfg.error||'Campaign not found: '+campaign);
+      if(!cfg.ok) throw new Error(cfg.error||'Campaign not found: '+campaign);
       campaignConfig = cfg;
       buildForm(cfg);
-    } catch(err) {
+    } catch(err){
       document.getElementById('state-loading').style.display='none';
       document.getElementById('state-error').style.display='';
-      document.getElementById('error-msg').textContent=err.message;
+      document.getElementById('error-msg').textContent=err.message+'. Check the campaign parameter in the URL.';
     }
   }
 
