@@ -303,17 +303,21 @@
       var paired = [];
       var pairs  = [['firstName','lastName'],['email','phone']];
       pairs.forEach(function(p){
-        if (required.includes(p[0]) && required.includes(p[1])) {
+        var hasFirst = required.indexOf(p[0]) > -1;
+        var hasSecond = required.indexOf(p[1]) > -1;
+        if (hasFirst && hasSecond) {
           var row = document.createElement('div');
           row.className = 'form-row';
-          row.appendChild(buildField(p[0], true, cfg));
-          row.appendChild(buildField(p[1], true, cfg));
+          try { row.appendChild(buildField(p[0], true, cfg)); } catch(e) { console.error('buildField error:',p[0],e); }
+          try { row.appendChild(buildField(p[1], true, cfg)); } catch(e) { console.error('buildField error:',p[1],e); }
           container.appendChild(row);
           paired.push(p[0]); paired.push(p[1]);
         }
       });
       required.forEach(function(name){
-        if (!paired.includes(name)) container.appendChild(buildField(name, true, cfg));
+        if (paired.indexOf(name) === -1) {
+          try { container.appendChild(buildField(name, true, cfg)); } catch(e) { console.error('buildField error:',name,e); }
+        }
       });
     }
 
@@ -324,7 +328,7 @@
       sec2.textContent = 'Optional Information';
       container.appendChild(sec2);
       optional.forEach(function(name){
-        container.appendChild(buildField(name, false, cfg));
+        try { container.appendChild(buildField(name, false, cfg)); } catch(e) { console.error('buildField optional error:',name,e); }
       });
     }
 
