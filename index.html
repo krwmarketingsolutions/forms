@@ -155,7 +155,7 @@
 
     var label = document.createElement('label');
     label.htmlFor = 'field-' + name;
-    var labelText = (cfg.field_labels && cfg.field_labels[name]) || FIELD_LABELS[name] || name;
+    var labelText = (cfg.fieldLabels && cfg.fieldLabels[name]) || (cfg.field_labels && cfg.field_labels[name]) || FIELD_LABELS[name] || name;
     label.innerHTML = labelText + (required ? '<span class="req">*</span>' : '');
     wrap.appendChild(label);
 
@@ -284,8 +284,13 @@
     var container = document.getElementById('form-fields');
     container.innerHTML = '';
 
-    var required = cfg.required_fields || cfg.required || [];
-    var optional = cfg.optional_fields || cfg.optional || [];
+    var safeArray = function(v) {
+      if (!v) return [];
+      if (Array.isArray(v)) return v;
+      try { var p = JSON.parse(v); return Array.isArray(p) ? p : []; } catch(e) { return []; }
+    };
+    var required = safeArray(cfg.required_fields || cfg.required);
+    var optional = safeArray(cfg.optional_fields || cfg.optional);
 
     // Required section
     if (required.length) {
@@ -338,8 +343,13 @@
     // Build data object from all form fields
     var data = {};
     var cfg  = campaignConfig;
-    var required = cfg.required_fields || cfg.required || [];
-    var optional = cfg.optional_fields || cfg.optional || [];
+    var safeArray2 = function(v) {
+      if (!v) return [];
+      if (Array.isArray(v)) return v;
+      try { var p = JSON.parse(v); return Array.isArray(p) ? p : []; } catch(e) { return []; }
+    };
+    var required = safeArray2(cfg.required_fields || cfg.required);
+    var optional = safeArray2(cfg.optional_fields || cfg.optional);
     required.concat(optional).forEach(function(name){
       var el = document.getElementById('field-' + name);
       if (el) data[name] = el.value;
